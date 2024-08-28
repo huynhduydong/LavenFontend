@@ -87,7 +87,6 @@ const Header = () => {
                   0
                 </div>
                 </Link>
-              </div>
             </div>
           </div>
 
