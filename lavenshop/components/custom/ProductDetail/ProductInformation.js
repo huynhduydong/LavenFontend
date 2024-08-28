@@ -1,20 +1,7 @@
-import Image from "next/image";
 import React from "react";
-import product1 from "@/public/pictures/product/product1.jpg";
 import { convertPrice } from "@/utils/convertPrice";
 
 export const ProductInformation = ({ product }) => {
-  product.options &&
-    product.options.map((item, index) => {
-      {
-        console.log(">>> check item:", item);
-        item.value &&
-          item.value.split(",").map((item, index) => {
-            console.log(">>> check value:", item);
-          });
-      }
-    });
-  console.log(">>> check option:", product.options);
   return (
     <>
       {product && (
@@ -78,34 +65,32 @@ export const ProductInformation = ({ product }) => {
           {/* Product Option */}
           <div className="mt-6 px-5 pb-4 flex items-center">
             <div className="flex flex-col">
-              {product &&
-                product.options &&
-                product.options.map((item, index) => {
-                  return (
-                    <>
-                      <section className="flex items-center gap-4 text-sm">
-                        <div className="w-28 mt-2 text-gray-500">
-                          {item.name}
-                        </div>
-                        <div className="flex items-center">
-                          {item.value &&
-                            item.value.split(",").map((item, index) => {
-                              return (
-                                <button
-                                  style={{
-                                    border: "1px solid rgba(0, 0, 0, .09)",
-                                  }}
-                                  className="inline-flex mt-2 mr-2 p-2 px-4 rounded-sm items-center justify-center min-h-10 min-w-20"
-                                >
-                                  {item}
-                                </button>
-                              );
-                            })}
-                        </div>
-                      </section>
-                    </>
-                  );
-                })}
+              <div className="flex items-center">
+                <div className="w-28 mt-2 text-gray-500">Màu: </div>
+                {product &&
+                  product.options &&
+                  product.options.map((productOptions) => (
+                    <div
+                      key={productOptions.id}
+                      className="flex items-center gap-4 text-sm"
+                    >
+                      <div className="flex items-center">
+                        {productOptions.value &&
+                          productOptions.value.split(",").map((item) => (
+                            <button
+                              key={item}
+                              style={{
+                                border: "1px solid rgba(0, 0, 0, .09)",
+                              }}
+                              className="inline-flex mt-2 mr-2 p-2 px-4 rounded-sm items-center justify-center min-h-10 min-w-20"
+                            >
+                              {item}
+                            </button>
+                          ))}
+                      </div>
+                    </div>
+                  ))}
+              </div>
 
               <section className="flex items-center gap-4 text-sm mt-6 h-8">
                 <div className="w-28 mt-2 text-gray-500">Số lượng </div>

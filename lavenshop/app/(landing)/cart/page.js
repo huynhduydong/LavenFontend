@@ -1,11 +1,11 @@
 import Image from "next/image";
 import product1 from "@/public/pictures/product/product1.jpg";
 
-const page = () => {
+const Page = () => {
   const numbers = [0, 1, 2, 3, 4];
 
   return (
-    <div className="bg-detail w-full px-40 py-10 h-full ">
+    <div className="bg-detail w-full px-32 py-10 h-full ">
       <table className="table-auto w-full mb-4">
         <thead className="bg-white mb-4 border-2">
           <tr>
@@ -45,7 +45,7 @@ const page = () => {
                   </p>
                 </td>
                 <td className="px-2 py-4 text-sm whitespace-nowrap text-center">
-                  Đen
+                  Màu: Đen
                 </td>
                 <td className="px-2 py-4 text-sm whitespace-nowrap flex items-center justify-center gap-2">
                   <div className="text-gray-300 line-through">390.000đ</div>
@@ -152,4 +152,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

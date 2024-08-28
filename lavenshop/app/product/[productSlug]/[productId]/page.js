@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { getProductById } from "@/services/productServices";
 import { useParams } from "next/navigation";
 
-const page = () => {
+const Page = () => {
   const [product, setProduct] = new useState({});
   const params = useParams();
 
@@ -44,4 +44,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
