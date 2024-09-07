@@ -11,8 +11,8 @@ const HeaderWithoutSearch = ({ pageTitle }) => {
             <Link href="/" className={`${nunito.className}`}>
               <div className="flex flex-col justify-center items-center">
                 <div className="flex">
-                  <div className="text-5xl font-extrabold">Har</div>
-                  <div className="text-5xl font-bold text-yellow-500">be</div>
+                  <div className="text-5xl font-extrabold">La</div>
+                  <div className="text-5xl font-bold text-yellow-500">ven</div>
                 </div>
                 <div className="text-base font-bold">Tốt & Nhanh</div>
               </div>

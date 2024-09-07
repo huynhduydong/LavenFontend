@@ -1,40 +1,94 @@
+"use client";
+
 import Link from "next/link";
 import { nunito } from "./../../../components/ui/fonts";
 import Image from "next/image";
 import logo2 from "../../../public/ic_logo_2.svg";
 import facebookLogo from "../../../public/ic_facebook_logo.svg";
 import googleLogo from "../../../public/ic_goole_logo.svg";
+import { useState } from "react";
+import axios from "axios";
+import qs from "qs";
 
-const page = () => {
+export default function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+
+    // console.log({ username, password });
+
+    let data = qs.stringify({
+      'grant_type': 'password',
+      'username': 'admin',
+      'password': 'admin',
+      'scope': 'client-internal',
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8080/api/oauth2/v1/token",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: "Basic Y2xpZW50OnNlY3JldA==",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <div className="bg-blue-100 flex flex-row items-center justify-evenly py-[100px]">
         {/* Logo */}
         <Image
           src={logo2}
-          alt="Harbe Logo"
+          alt="Laven Logo"
           priority={true}
-          className="h-auto w-[600px]"
-        ></Image>
+          className="h-auto w-[400px]"
+        />
 
         {/* Form */}
         <div className="bg-white p-[32px] rounded-lg w-[480px]">
           <div className="text-xl">Đăng nhập</div>
 
-          <input
-            placeholder="Email/Số điện thoại/Tên đăng nhập"
-            className="w-full text-[14px] focus:outline-none focus:border-blue-600 focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[32px]"
-          ></input>
+          <form onSubmit={handleLogin}>
+            <input
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Email/Số điện thoại/Tên đăng nhập"
+              className="w-full text-sm focus:outline-none focus:border-blue-600 focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[32px]"
+              required
+            />
 
-          <input
-            placeholder="Mật khẩu"
-            className="w-full text-[14px] focus:outline-none focus:border-blue-600 focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[20px]"
-            type="password"
-          ></input>
+            <input
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Mật khẩu"
+              className="w-full text-sm focus:outline-none focus:border-blue-600 focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[20px]"
+              type="password"
+              required
+            />
 
-          <button className="w-full bg-blue-600 text-white mt-[32px] rounded py-[12px] hover:bg-blue-400">
-            ĐĂNG NHẬP
-          </button>
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white mt-[32px] rounded py-[12px] hover:bg-blue-400"
+            >
+              ĐĂNG NHẬP
+            </button>
+          </form>
 
           <Link href={"/"} className="hover:text-gray-600">
             <div className="text-[14px] text-blue-600 mt-[8px] hover:decoration-solid hover:underline">
@@ -72,5 +126,4 @@ const page = () => {
       </div>
     </>
   );
-};
-export default page;
+}
