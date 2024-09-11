@@ -18,6 +18,12 @@ module.exports = {
     },
     extend: {
       colors: {
+        bodydark1: "#DEE4EE",
+        bodydark: "#AEB7C0",
+        black: "#1C2434",
+        whiten: "#F1F5F9",
+        whiter: "#F5F7FD",
+        stroke: "#E2E8F0",
         detail: "#efefef",
         price: "#fafafa",
         border: "hsl(var(--border))",
