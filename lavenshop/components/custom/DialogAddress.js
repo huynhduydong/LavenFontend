@@ -36,7 +36,7 @@ const DialogAddress = () => {
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="default" id="r1" />
               <Label htmlFor="r1">
-                Phường Bình Hòa, Thành Phố Thuận An, Bình Dương
+                Phường Hiệp Bình Phước, huyện Nhà Bè, TP. Hồ Chí Minh
               </Label>
             </div>
             <div className="flex items-center space-x-2">

@@ -1,6 +1,3 @@
-import Image from "next/image";
-import product1 from "@/public/pictures/product/product1.jpg";
-
 const TableTwo = ({ productData }) => {
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -60,7 +57,7 @@ const TableTwo = ({ productData }) => {
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-black dark:text-white">
-              ${product.price}
+              {product.price}đ
             </p>
           </div>
           <div className="col-span-1 flex items-center">
