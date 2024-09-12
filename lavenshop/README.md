@@ -50,13 +50,13 @@ Some of the pictures of this Application
    ```
 2. Navigate to the project directory:
    ```
-   cd LavenShopBackend
+   cd LavenShop
    ```
-3. Build the project using Maven:
+3. Install dependencies:
    ```
-   mvn clean install
+   npm install
    ```
-4. Run the application:
+4. Build the project:
    ```
-   mvn spring-boot:run
+   npm run dev
    ```
