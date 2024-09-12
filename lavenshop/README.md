@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LavenShop
+Link to Backend repo: [Laven BE](https://github.com/huynhduydong/MasterShop)
+## Introduction
+### Project: Laven - E-commerce Platform
+- Back-end:Built with Spring Boot, providing a scalable and secure foundation for handling API requests, business logic, and database management.
+- Front-end:Developed using Next.js for server-side rendering and React.js for building dynamic, interactive user interfaces.
+- Styling:TailwindCSS is utilized to create a modern, responsive design with a focus on efficiency and ease of customization.
+- Key Features: Includes product browsing, cart management, and secure checkout processes, delivering an optimized and user-friendly shopping experience.
+- Objective: To create a high-performance e-commerce platform that is scalable, maintainable, and provides a seamless experience for both users and administrators.
 
-## Getting Started
+## Features
+### Technologies and Framework
+- Back-end
+  - Java 17
+  - Spring Boot 3: Authorization Server(OAuth2)
+  - Zipkin
+  - Redis
+- Front-end
+  - NextJS 14
+  - ReactJS
+  - TailwindCSS
+  - RadixUI
+  - ShadcnUI 
+### Demo
+Some of the pictures of this Application
+- Front-end:
+<div align="center">
+  <img src="resources/homepage.png", alt="Home page" width="600" />
+  <p><i>Homepage Screen</i></p>
+</div>
 
-First, run the development server:
+<div align="center">
+  <img src="resources/prodetail.png", alt="Detail product" width="600" />
+  <p><i>Detail product Screen</i></p>
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<div align="center">
+  <img src="resources/admin.png", alt="Admin product" width="600" />
+  <p><i>Admin product Screen</i></p>
+</div>
+<div align="center">
+  <img src="resources/cart.png", alt="cart" width="600" />
+  <p><i>Cart Screen</i></p>
+</div>
+## Setup
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Clone the repository:
+   ```
+   git clone https://github.com/huynhduydong/LavenFontend
+   ```
+2. Navigate to the project directory:
+   ```
+   cd LavenShopBackend
+   ```
+3. Build the project using Maven:
+   ```
+   mvn clean install
+   ```
+4. Run the application:
+   ```
+   mvn spring-boot:run
+   ```
