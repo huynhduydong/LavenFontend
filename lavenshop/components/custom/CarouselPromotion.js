@@ -9,11 +9,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import firstPromo from "@/public/pictures/promotion/firstPromo.jpg";
-import secondPromo from "@/public/pictures/promotion/secondPromo.jpg";
-import thirdPromo from "@/public/pictures/promotion/thirdPromo.jpg";
-import fourthPromo from "@/public/pictures/promotion/fourthPromo.jpg";
-import fifthPromo from "@/public/pictures/promotion/fifthPromo.jpg";
+import firstPromo from "@/public/pictures/promotion/firstPromo.jpeg";
+import secondPromo from "@/public/pictures/promotion/secondPromo.jpeg";
+import thirdPromo from "@/public/pictures/promotion/thirdPromo.jpeg";
+import fourthPromo from "@/public/pictures/promotion/fourthPromo.jpeg";
+import fifthPromo from "@/public/pictures/promotion/sixthPromo.jpeg";
 
 const CarouselPromotion = ({ imgSrc }) => {
   const imrArr = [firstPromo, secondPromo, thirdPromo, fourthPromo, fifthPromo];
