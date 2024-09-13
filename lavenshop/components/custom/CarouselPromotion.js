@@ -18,12 +18,18 @@ import fifthPromo from "@/public/pictures/promotion/sixthPromo.jpeg";
 const CarouselPromotion = ({ imgSrc }) => {
   const imrArr = [firstPromo, secondPromo, thirdPromo, fourthPromo, fifthPromo];
   return (
-    <Carousel className="w-full">
+    <Carousel
+      className="w-full"
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+    >
       <CarouselContent className="">
         {imrArr.map((item, index) => (
-          <CarouselItem key={index}>
+          <CarouselItem className="flex basis-1/2 gap-4" key={index}>
             <div className="items-center justify-center">
-              <Image src={item} alt="Promotion" />
+              <Image src={item} alt="Promotion" className="rounded-sm" />
             </div>
           </CarouselItem>
         ))}

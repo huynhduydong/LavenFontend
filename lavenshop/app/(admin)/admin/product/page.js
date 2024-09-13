@@ -1,7 +1,5 @@
 "use client";
-import Breadcrumb from "@/components/admin/Breadcrumbs/Breadcrumb";
-import DefaultLayout from "@/components/admin/Layout/DefaultLayout";
-import TableTwo from "@/components/admin/Table/TableTwo";
+
 import SearchInput from "@/components/custom/SearchInput";
 import { getListProduct } from "@/services/productServices";
 import Image from "next/image";
@@ -9,15 +7,14 @@ import { useState, useEffect } from "react";
 import icPlus from "@/public/ic_admin/ic_plus.svg";
 import icEditBlue from "@/public/ic_admin/ic_edit_blue.svg";
 import icBin from "@/public/ic_admin/ic_bin.svg";
-import ProductRow from "@/components/admin/ProductRow";
-import CustomTable from "@/components/admin/CustomTable";
-import { usePathname } from "next/navigation";
-import HomePage from "@/components/HomePage";
+import ProductRow from "@/components/custom/Admin/ProductRow";
+import CustomTable from "@/components/custom/Admin/CustomTable";
+import { PaginationSelection } from "@/components/HomePage";
 
 const ProductAdminPage = () => {
   const [productList, setProductList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState();
   const productField = [
     "Ảnh",
@@ -103,10 +100,9 @@ const ProductAdminPage = () => {
           renderRow={(item) => <ProductRow product={item} />}
           field={productField}
         />
-
         {/* Pagination */}
         <div>
-          <HomePage
+          <PaginationSelection 
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}

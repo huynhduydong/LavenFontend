@@ -4,9 +4,9 @@ import Footer from "@/components/Footer";
 export default function LandingLayout({ children }) {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       {children}
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

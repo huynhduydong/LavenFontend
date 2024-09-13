@@ -1,7 +1,7 @@
 "use client";
 
-import AdminHeader from "@/components/admin/AdminHeader";
-import AdminSideBar from "@/components/admin/AdminSideBar";
+import AdminHeader from "@/components/custom/Admin/AdminHeader";
+import AdminSideBar from "@/components/custom/Admin/AdminSideBar";
 import icDashboards from "@/public/ic_admin/ic_dashboards.svg";
 import icProduct from "@/public/ic_admin/ic_product.svg";
 import icTag from "@/public/ic_admin/ic_tag.svg";
