@@ -16,6 +16,8 @@ import {
     itemTrigger,
     title,
     content,
+    confirmContent,
+  cancelContent,
     onConfirm,
     onCancel,
   }) {
@@ -36,8 +38,8 @@ import {
                 onCancel && onCancel();
               }}
             >
-              <div className="text-blue-600">Cancel</div>
-            </button>
+            <div className="text-blue-600">{cancelContent}</div>
+                        </button>
             <button
               className="bg-blue-600 py-[8px] px-[16px] hover:opacity-80 rounded-[6px]"
               onClick={() => {
@@ -45,8 +47,8 @@ import {
                 onConfirm && onConfirm();
               }}
             >
-              <div className="text-white">Continue</div>
-            </button>
+            <div className="text-white">{confirmContent}</div>
+                        </button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

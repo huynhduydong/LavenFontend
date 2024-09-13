@@ -32,4 +32,20 @@ const getProductById = async (productId) => {
   }
 };
 
-export { getListProduct, getProductById };
+export { getListProduct, getProductById,createProduct };
+
+
+const createProduct = async (product) => {
+  let data = product;
+  try {
+    const res = await axios.post(
+      "http://localhost:8080/api/v1/products",
+      data
+    );
+    if (res && res.data) {
+      return res;
+    }
+  } catch (error) {
+    return error.response;
+  }
+};

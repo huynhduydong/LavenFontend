@@ -2,7 +2,7 @@
 
 import React from "react";
 import SearchInput from "@/components/custom/SearchInput";
-import { getListProduct } from "@/services/productServices";
+import { createProduct, getListProduct } from "@/services/productServices";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import icPlus from "@/public/ic_admin/ic_plus.svg";
@@ -15,6 +15,8 @@ import { CustomCreateDialog } from "@/components/custom/Admin/CustomCreateDialog
 import ImagePicker from "@/components/custom/Admin/ImagePicker";
 import iconPlusBlue from "@/public/ic_admin/ic_plus_blue.svg";
 import iconRemove from "@/public/ic_admin/ic_remove.svg";
+import { uploadFile } from "@/services/firebaseService";
+import { getAccessToken, getSession } from "@/services/authServices";
 
 const ProductAdminPage = () => {
   const [productList, setProductList] = useState([]);
@@ -35,6 +37,13 @@ const ProductAdminPage = () => {
   const [selectedProduct, setSelectedProduct] = useState([]);
   const [productSpecList, setProductSpecList] = useState([]);
   const [productOptionList, setProductOptionList] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [productPrice, setProductPrice] = useState(0);
+  const [productDiscount, setProductDiscount] = useState(0);
+  const [productQuantity, setProductQuantity] = useState(0);
+  const [productName, setProductName] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [productBrand, setProductBrand] = useState("");
 
   const getProductData = async () => {
     const data = await getListProduct(currentPage, itemsPerPage);
@@ -42,17 +51,27 @@ const ProductAdminPage = () => {
     setTotalItems(data.totalElements);
   };
 
-  const [selectedFiles, setSelectedFiles] = useState([]);
-
   const handleFileAccepted = (files) => {
     setSelectedFiles(files);
   };
 
-  const getAllProductQuantity = async () => {
-    const data = await getListProduct();
-    console.log(data);
-    setTotalProductQuantity(data.content.length);
+  const resetState = () => {
+    setSelectedFiles([]);
+    setProductOptionList([]);
+    setProductSpecList([]);
+    setProductPrice(0);
+    setProductDiscount(0);
+    setProductQuantity(0);
+    setProductName("");
+    setProductDescription("");
+    setProductBrand("");
   };
+
+  // const getAllProductQuantity = async () => {
+  //   const data = await getListProduct();
+  //   console.log(data);
+  //   setTotalProductQuantity(data.content.length);
+  // };
 
   // useEffect(() => {
   //   getAllProductQuantity();
@@ -98,7 +117,35 @@ const ProductAdminPage = () => {
             </div>
           </button>
 
+          {/* Create product dialog */}
           <CustomCreateDialog
+             onConfirm={async () => {
+              console.log("Confirm create product");
+              const imgURL = selectedFiles[0]
+                ? await uploadFile(selectedFiles[0])
+                : "";
+           
+              const res = await createProduct(
+                {
+                  name: productName,
+                  description: productDescription,
+                  brand: productBrand,
+                  price: productPrice,
+                  discountRate: productDiscount,
+                  quantitySold: productQuantity,
+                  thumbnailUrl: imgURL,
+                  options: productSpecList,
+                  specifications: productOptionList,
+                  categoryUrl: "new-cate",
+                },           
+              );
+              console.log(res);
+              // resetState();
+            }}
+            onCancel={() => {
+              console.log("Cancel create product");
+              // resetState();
+            }}
             itemTrigger={
               <button className="bg-blue-600 px-[20px] py-[6px] rounded-[8px] hover:drop-shadow-xl hover:opacity-80 flex flex-row items-center justify-center w-[110px]">
                 <Image alt="Plus icon" src={icPlus} width={12} height={12} />
@@ -119,13 +166,12 @@ const ProductAdminPage = () => {
                     </div>
                     <div className="flex flex-row items-center justify-center p-[16px] bg-white rounded-[8px] border-[1.5px] border-gray-300 mt-[24px]">
                       <ImagePicker onFileAccepted={handleFileAccepted} />
-
-                      <div className="w-[240px] h-[240px] flex items-center justify-center">
-                        {selectedFiles.length > 0 && (
-                          <div>
-                            <ul>
+                      <div className=" flex items-center justify-center">
+                        <div className="w-[240px] h-[240px]">
+                          {selectedFiles.length > 0 && (
+                            <div>
                               {selectedFiles.map((file, index) => (
-                                <li
+                                <div
                                   key={index}
                                   className="ml-[16px] rounded-[8px]"
                                 >
@@ -135,11 +181,11 @@ const ProductAdminPage = () => {
                                     width={240}
                                     height={240}
                                   />
-                                </li>
+                                </div>
                               ))}
-                            </ul>
-                          </div>
-                        )}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -147,17 +193,37 @@ const ProductAdminPage = () => {
                   {/* Price */}
                   <div className="p-[16px] bg-white rounded-[8px] border-[1.5px] border-gray-300 flex flex-grow flex-col mx-[16px]">
                     <div className="text-base text-black font-semibold">
-                      Giá và số lượng
+                      Hãng, giá và số lượng
                     </div>
                     <div className="flex flex-col items-start justify-start bg-white mt-[12px] flex-grow">
+                      <div className="w-full mt-[12px]">
+                        <div className="text-sm font-semibold text-black flex flex-col justify-start items-start">
+                          Hãng
+                        </div>
+                        <div className="w-full relative flex items-center justify-center flex-row">
+                          <input
+                            value={productBrand || ""}
+                            type="text"
+                            className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
+                            onChange={(e) => {
+                              setProductBrand(e.target.value);
+                            }}
+                          />
+                        </div>
+                      </div>
+
                       <div className="w-full mt-[12px]">
                         <div className="text-sm font-semibold text-black flex flex-col justify-start items-start">
                           Giá cơ bản
                         </div>
                         <div className="w-full relative flex items-center justify-center flex-row">
                           <input
+                            value={productPrice || ""}
                             type="number"
                             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
+                            onChange={(e) => {
+                              setProductPrice(e.target.value);
+                            }}
                           />
                           <div className="text-sm text-black absolute right-[16px] mt-[4px]">
                             đ
@@ -171,6 +237,10 @@ const ProductAdminPage = () => {
                         </div>
                         <div className="w-full relative flex items-center justify-center flex-row">
                           <input
+                            value={productDiscount || ""}
+                            onChange={(e) => {
+                              setProductDiscount(e.target.value);
+                            }}
                             type="number"
                             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
                           />
@@ -186,6 +256,10 @@ const ProductAdminPage = () => {
                         </div>
                         <div className="w-full relative flex items-center justify-center flex-row">
                           <input
+                            value={productQuantity || ""}
+                            onChange={(e) => {
+                              setProductQuantity(e.target.value);
+                            }}
                             type="number"
                             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] pl-[16px] pr-[8px] rounded-[6px] w-full mt-[4px]"
                           />
@@ -208,6 +282,10 @@ const ProductAdminPage = () => {
                         </div>
                         <div className="w-full relative flex items-center justify-center flex-row">
                           <input
+                            value={productName || ""}
+                            onChange={(e) => {
+                              setProductName(e.target.value);
+                            }}
                             type="text"
                             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
                           />
@@ -220,8 +298,12 @@ const ProductAdminPage = () => {
                         </div>
                         <div className="w-full relative flex items-center justify-center flex-row">
                           <textarea
+                            value={productDescription || ""}
+                            onChange={(e) => {
+                              setProductDescription(e.target.value);
+                            }}
                             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
-                            rows="5"
+                            rows="7"
                           ></textarea>
                         </div>
                       </div>
@@ -240,6 +322,18 @@ const ProductAdminPage = () => {
                       {productSpecList.map((item, index) => (
                         <NameValueForm
                           key={index}
+                          name={item.name}
+                          value={item.value}
+                          onNameChange={(e) => {
+                            const temp = [...productSpecList];
+                            temp[index].name = e.target.value;
+                            setProductSpecList(temp);
+                          }}
+                          onValueChange={(e) => {
+                            const temp = [...productSpecList];
+                            temp[index].value = e.target.value;
+                            setProductSpecList(temp);
+                          }}
                           onRemove={() => {
                             setProductSpecList(
                               productSpecList.filter((_, i) => i != index)
@@ -275,6 +369,18 @@ const ProductAdminPage = () => {
                       {productOptionList.map((item, index) => (
                         <NameValueForm
                           key={index}
+                          name={item.name}
+                          value={item.value}
+                          onNameChange={(e) => {
+                            const temp = [...productOptionList];
+                            temp[index].name = e.target.value;
+                            setProductOptionList(temp);
+                          }}
+                          onValueChange={(e) => {
+                            const temp = [...productOptionList];
+                            temp[index].value = e.target.value;
+                            setProductOptionList(temp);
+                          }}
                           onRemove={() => {
                             setProductOptionList(
                               productOptionList.filter((_, i) => i != index)
@@ -343,7 +449,13 @@ const ProductAdminPage = () => {
   );
 };
 
-export const NameValueForm = ({ name, value, onChange, onRemove }) => {
+export const NameValueForm = ({
+  name,
+  value,
+  onNameChange,
+  onValueChange,
+  onRemove,
+}) => {
   return (
     <>
       <div className="w-full mt-[12px] flex flex-row items-center">
@@ -352,6 +464,8 @@ export const NameValueForm = ({ name, value, onChange, onRemove }) => {
             Tên
           </div>
           <input
+            value={name || ""}
+            onChange={onNameChange}
             type="text"
             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
           />
@@ -362,6 +476,8 @@ export const NameValueForm = ({ name, value, onChange, onRemove }) => {
             Giá trị
           </div>
           <input
+            value={value || ""}
+            onChange={onValueChange}
             type="text"
             className="border-[1.5px] border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-600 focus:border-[1.5px] text-black text-sm py-[8px] px-[16px] rounded-[6px] w-full mt-[4px] pr-[32px]"
           />
