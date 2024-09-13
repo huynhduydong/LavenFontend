@@ -32,7 +32,6 @@ const getProductById = async (productId) => {
   }
 };
 
-export { getListProduct, getProductById,createProduct };
 
 
 const createProduct = async (product) => {
@@ -49,3 +48,35 @@ const createProduct = async (product) => {
     return error.response;
   }
 };
+
+const updateProductById = async (product, id) => {
+  let data = product;
+
+  
+
+  try {
+    const res = await axios.put(
+      `http://localhost:8080/api/v1/products/${id}`,
+      data
+    );
+    if (res && res.data) {
+      return res;
+    }
+  } catch (error) {
+    return error.response;
+  }
+};
+const deleteProductById = async (id) => {
+  
+  try {
+    const res = await axios.delete(
+      `http://localhost:8080/api/v1/products/${id}`
+    );
+    if (res && res.data) {
+      return res;
+    }
+  } catch (error) {
+    return error.response;
+  }
+};
+export { getListProduct, getProductById,createProduct,updateProductById,deleteProductById };

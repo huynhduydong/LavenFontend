@@ -12,14 +12,15 @@ import {
 import { useState } from "react";
 import { CustomAlertDialog } from "./CustomAlertDialog";
 
-export function CustomCreateDialog({
+export function CustomUpdateDialog({
   itemTrigger,
   title,
   itemContent,
   onConfirm,
   onCancel,
   confirmContent,
-}) {  const [open, setOpen] = useState(false);
+}) {
+  const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{itemTrigger}</DialogTrigger>
@@ -45,7 +46,7 @@ export function CustomCreateDialog({
                   Hủy bỏ
                 </button>
               }
-              title={"Bạn có chắc chắn muốn hủy thao tác này?"}
+              title={"Bạn có chắc chắn muốn hủy bỏ thao tác này?"}
               content={
                 "Những nội dung bạn sửa đổi sẽ bị mất. Thao tác này không thể hoàn tác!"
               }
@@ -58,16 +59,16 @@ export function CustomCreateDialog({
                   className="text-white text-[16px] bg-blue-600 px-[16px] py-[8px] rounded-[6px] hover:opacity-80"
                   onClick={() => {}}
                 >
-                                    {confirmContent}
+                  {confirmContent}
                 </button>
               }
-              title={"Bạn có chắc chắn muốn thêm sản phẩm này?"}
-              content={"Sản phẩm sẽ được thêm vào danh sách sản phẩm."}
+              title={"Bạn có chắc chắn muốn cập nhật sản phẩm này?"}
+              content={"Thông tin của sản phẩm sẽ được cập nhật."}
               onConfirm={() => {
                 setOpen(false);
                 onConfirm && onConfirm();
               }}
-              confirmContent={"Thêm"}
+              confirmContent={"Cập nhật"}
               cancelContent={"Hủy"}
             />
           </div>
