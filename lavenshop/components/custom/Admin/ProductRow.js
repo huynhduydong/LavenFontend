@@ -1,8 +1,11 @@
 import trimText from "@/utils/trimText";
 import Image from "next/image";
 import iconEye from "@/public/ic_eye.svg";
+import { CustomCheckbox } from "./CustomCheckbox";
+import { CustomDialog } from "./CustomDialog";
+import iconStar from "@/public/ic_star.svg";
 
-const ProductRow = ({ product }) => {
+const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
   const formatMoney = (amount) => {
     // Ensure the input is treated as a string
     let amountStr = amount.toString();
@@ -24,8 +27,11 @@ const ProductRow = ({ product }) => {
 
   return (
     <>
-      <td>
-        <div className="py-[3px] w-[100px]">
+      {/* <td>
+        <CustomCheckbox />
+      </td> */}
+      <td className={className + " rounded-l-[4px]"} onClick={onSelected}>
+        <div className="py-[3px] w-[100px] pl-[4px]">
           <img
             src={product.thumbnailUrl}
             className="rounded-sm self-center h-[48px] w-[48px]"
@@ -33,22 +39,128 @@ const ProductRow = ({ product }) => {
           />
         </div>
       </td>
-      <td>
+      <td className={className} onClick={onSelected}>
         <div className="pr-[8px] line-clamp-2">{product.name}</div>
       </td>
-      <td>
+      <td className={className} onClick={onSelected}>
         <div className="">{product.brand}</div>
       </td>
-      <td className="">
+      <td className={className} onClick={onSelected}>
         <div className="flex flex-row items-center justify-start">
           <div>{formatMoney(product.price)}</div>
           <div className="ml-[4px]">đ</div>
         </div>
       </td>
-      <td>{product.discountRate}</td>
-      <td>{product.ratingAverage}</td>
-      <td>{product.reviewCount}</td>
-      <td>{product.quantitySold}</td>
+      <td className={className} onClick={onSelected}>
+        {product.discountRate}%
+      </td>
+      <td className={className} onClick={onSelected}>
+        {product.ratingAverage}
+      </td>
+      <td className={className} onClick={onSelected}>
+        {product.reviewCount}
+      </td>
+      <td className={className} onClick={onSelected}>
+        {product.quantitySold}
+      </td>
+      <td className={className + " rounded-r-[4px]"} onClick={onSelected}>
+        <div className="pr-[4px]" onClick={onClickViewDetail}></div>
+        <CustomDialog
+          itemTrigger={
+            <Image
+              alt="Show product info icon"
+              src={iconEye}
+              className="w-[20px] h-[20px]"
+            />
+          }
+          title={product.name}
+          itemContent={
+            <>
+              <div className="flex flex-col items-start justify-start w-full h-[500px] overflow-y-scroll">
+                <div className="mt-[8px] flex flex-row items-start justify-start w-full">
+                  <div className="flex flex-col items-start justify-center w-fit">
+                    <div className="flex flex-col items-start justify-center w-fit">
+                      <div>Ảnh sản phẩm</div>
+                      <img
+                        alt="Product image"
+                        src={product.thumbnailUrl}
+                        className="w-[240px] h-[240px] rounded-[8px] overflow-hidden border-[1.5px] border-gray-300 p-[8px] bg-white"
+                      />
+                    </div>
+
+                    <div className="mt-[16px] w-full flex flex-col items-start justify-center">
+                      <div>Thông tin chi tiết</div>
+                      <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
+                        <div className="flex flex-row">
+                          <div className="font-semibold">Số lượng: </div>
+                          <div className="ml-[4px]">{product.quantitySold}</div>
+                        </div>
+                        <div className="flex flex-row">
+                          <div className="font-semibold">Giá: </div>
+                          <div className="ml-[4px]">
+                            {formatMoney(product.price)}đ
+                          </div>
+                        </div>
+                        <div className="flex flex-row">
+                          <div className="font-semibold">Giảm giá: </div>
+                          <div className="ml-[4px]">
+                            {product.discountRate}%
+                          </div>
+                        </div>
+                        <div className="flex flex-row">
+                          <div className="font-semibold">Đánh giá: </div>
+                          <div className="ml-[4px]">
+                            <div className="flex flex-row items-center justify-start">
+                              <div>{product.ratingAverage}</div>
+                              <Image
+                                alt="Product rating"
+                                src={iconStar}
+                                className="ml-[4px]"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-row">
+                          <div className="font-semibold">Lượt đánh giá: </div>
+                          <div className="ml-[4px]">{product.reviewCount}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="ml-[28px] flex flex-col"
+                    style={{ width: "70%" }}
+                  >
+                    <div>Thông tin chi tiết</div>
+                    <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
+                      {product.specifications.map((spec, index) => (
+                        <div className="flex flex-row justify-start items-start w-full">
+                          <div className="font-semibold w-1/3">
+                            <div>{spec.name}</div>
+                          </div>
+                          <div
+                            className="ml-[8px] w-2/3"
+                            style={{ marginTop: index == 0 ? "" : "2px" }}
+                          >
+                            {spec.value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-[16px] mr-[16px]">
+                  <div>Mô tả sản phẩm</div>
+                  <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
+                    {product.description}
+                  </div>
+                </div>
+              </div>
+            </>
+          }
+        />
+      </td>
     </>
   );
 };
