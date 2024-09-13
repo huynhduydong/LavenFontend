@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 
-export function CustomDialog({ itemTrigger, title, itemContent }) {
+export function CustomViewDialog({ itemTrigger, title, itemContent }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -27,12 +27,12 @@ export function CustomDialog({ itemTrigger, title, itemContent }) {
         </DialogHeader>
         <DialogFooter>
           <button
-            className="text-white text-[16px] bg-blue-600 px-[16px] py-[6px] rounded-[8px] hover:opacity-80 mt-[8px]"
+            className="text-white text-[16px] bg-blue-600 px-[16px] py-[8px] rounded-[6px] hover:opacity-80 mt-[8px]"
             onClick={() => {
               setOpen(false);
             }}
           >
-            Close
+            Đóng
           </button>
         </DialogFooter>
       </DialogContent>

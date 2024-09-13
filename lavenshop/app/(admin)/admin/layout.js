@@ -21,8 +21,8 @@ export default function AdminLayout({ children }) {
   ];
 
   const others = [
-    { name: "Setting", icon: icSetting, link: "/admin/setting" },
-    { name: "Exit", icon: icExit, link: "/admin/exit" },
+    { name: "Setting", icon: icSetting, link: "/admin/user/settings" },
+        { name: "Exit", icon: icExit, link: "/admin/exit" },
   ];
 
   const pathname = usePathname();

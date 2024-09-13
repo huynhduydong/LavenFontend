@@ -2,7 +2,7 @@ import trimText from "@/utils/trimText";
 import Image from "next/image";
 import iconEye from "@/public/ic_eye.svg";
 import { CustomCheckbox } from "./CustomCheckbox";
-import { CustomDialog } from "./CustomDialog";
+import { CustomDialog, CustomViewDialog } from "./CustomViewDialog";
 import iconStar from "@/public/ic_star.svg";
 
 const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
@@ -65,7 +65,7 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
       </td>
       <td className={className + " rounded-r-[4px]"} onClick={onSelected}>
         <div className="pr-[4px]" onClick={onClickViewDetail}></div>
-        <CustomDialog
+        <CustomViewDialog
           itemTrigger={
             <Image
               alt="Show product info icon"
@@ -89,7 +89,7 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
                     </div>
 
                     <div className="mt-[16px] w-full flex flex-col items-start justify-center">
-                      <div>Thông tin chi tiết</div>
+                      <div>Thông tin</div>
                       <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
                         <div className="flex flex-row">
                           <div className="font-semibold">Số lượng: </div>
@@ -134,7 +134,26 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
                     <div>Thông tin chi tiết</div>
                     <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
                       {product.specifications.map((spec, index) => (
-                        <div className="flex flex-row justify-start items-start w-full">
+                        <div
+                          key={index}
+                          className="flex flex-row justify-start items-start w-full"
+                        >
+                          <div className="font-semibold w-1/3">
+                            <div>{spec.name}</div>
+                          </div>
+                          <div
+                            className="ml-[8px] w-2/3"
+                            style={{ marginTop: index == 0 ? "" : "2px" }}
+                          >
+                            {spec.value}
+                          </div>
+                        </div>
+                      ))}
+                      {product.options.map((spec, index) => (
+                        <div
+                          key={index}
+                          className="flex flex-row justify-start items-start w-full"
+                        >
                           <div className="font-semibold w-1/3">
                             <div>{spec.name}</div>
                           </div>
@@ -150,7 +169,7 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
                   </div>
                 </div>
 
-                <div className="mt-[16px] mr-[16px]">
+                <div className="mt-[16px] mr-[16px]" style={{ width: "98%" }}>
                   <div>Mô tả sản phẩm</div>
                   <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
                     {product.description}
