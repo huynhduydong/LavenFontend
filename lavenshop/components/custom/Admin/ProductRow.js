@@ -78,7 +78,8 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
             <>
               <div className="flex flex-col items-start justify-start w-full h-[500px] overflow-y-scroll">
                 <div className="mt-[8px] flex flex-row items-start justify-start w-full">
-                  <div className="flex flex-col items-start justify-center w-fit">
+                  <div className="flex flex-row items-start justify-start w-full">
+                    {/* Product image */}
                     <div className="flex flex-col items-start justify-center w-fit">
                       <div>Ảnh sản phẩm</div>
                       <img
@@ -88,9 +89,14 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
                       />
                     </div>
 
-                    <div className="mt-[16px] w-full flex flex-col items-start justify-center">
+                    {/* Product info */}
+                    <div className="w-fit flex flex-col items-start justify-center ml-[20px]">
                       <div>Thông tin</div>
                       <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
+                      <div className="flex flex-row">
+                          <div className="font-semibold">Phân loại: </div>
+                          <div className="ml-[4px]">{product.categoryUrl}</div>
+                        </div>
                         <div className="flex flex-row">
                           <div className="font-semibold">Số lượng: </div>
                           <div className="ml-[4px]">{product.quantitySold}</div>
@@ -126,49 +132,86 @@ const ProductRow = ({ product, className, onSelected, onClickViewDetail }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    className="ml-[28px] flex flex-col"
-                    style={{ width: "70%" }}
-                  >
-                    <div>Thông tin chi tiết</div>
-                    <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
-                      {product.specifications.map((spec, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-row justify-start items-start w-full"
-                        >
-                          <div className="font-semibold w-1/3">
-                            <div>{spec.name}</div>
-                          </div>
-                          <div
-                            className="ml-[8px] w-2/3"
-                            style={{ marginTop: index == 0 ? "" : "2px" }}
-                          >
-                            {spec.value}
-                          </div>
-                        </div>
-                      ))}
-                      {product.options.map((spec, index) => (
-                        <div
-                          key={index}
-                          className="flex flex-row justify-start items-start w-full"
-                        >
-                          <div className="font-semibold w-1/3">
-                            <div>{spec.name}</div>
-                          </div>
-                          <div
-                            className="ml-[8px] w-2/3"
-                            style={{ marginTop: index == 0 ? "" : "2px" }}
-                          >
-                            {spec.value}
-                          </div>
-                        </div>
-                      ))}
+                   {/* Product option info */}
+                   <div className="w-fit flex flex-col items-start justify-center ml-[20px] mr-[16px]">
+                      <div>Thông tin tùy chọn/cấu hình</div>
+                      <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full min-w-[220px]">
+                        {product.options
+                          .reduce((acc, cur) => {
+                            const { name, value } = cur;
+                            const existing = acc.find(
+                              (item) => item.name === name
+                            );
+                            if (existing) {
+                              existing.values.push(value);
+                            } else {
+                              acc.push({ name, values: [value] });
+                            }
+                            return acc;
+                          }, [])
+                          .map((option, index) => (
+                            <div key={index} className="flex flex-row">
+                              <div className="font-semibold">
+                                {option.name}:
+                              </div>
+                              <div className="ml-[4px] flex flex-wrap">
+                                {option.values.map((value, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex flex-row w-fit"
+                                  >
+                                    <div className="ml-[4px]">{value}</div>
+                                    {index < option.values.length - 1 && ", "}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </div>
 
+                {/* Product details */}
+                <div className="mt-[16px] mr-[16px]" style={{ width: "98%" }}>
+                  <div>Thông tin chi tiết</div>
+                  <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">
+                    {product.specifications.map((spec, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-row justify-start items-start w-full"
+                      >
+                        <div className="font-semibold w-1/3">
+                          <div>{spec.name}</div>
+                        </div>
+                        <div
+                          className="ml-[8px] w-2/3"
+                          style={{ marginTop: index == 0 ? "" : "2px" }}
+                        >
+                          {spec.value}
+                        </div>
+                      </div>
+                    ))}
+                    {/* {product.options.map((spec, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-row justify-start items-start w-full"
+                      >
+                        <div className="font-semibold w-1/3">
+                          <div>{spec.name}</div>
+                        </div>
+                        <div
+                          className="ml-[8px] w-2/3"
+                          style={{ marginTop: index == 0 ? "" : "2px" }}
+                        >
+                          {spec.value}
+                        </div>
+                      </div>
+                    ))} */}
+                  </div>
+                </div>
+
+                {/* Product description */}
                 <div className="mt-[16px] mr-[16px]" style={{ width: "98%" }}>
                   <div>Mô tả sản phẩm</div>
                   <div className="text-black text-base flex flex-col items-start justify-center bg-white p-[16px] rounded-[8px] border-[1.5px] border-gray-300 w-full">

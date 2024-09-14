@@ -5,8 +5,8 @@ import { useDropzone } from "react-dropzone";
 import iconAddImage from "@/public/ic_admin/ic_add_image.svg";
 import Image from "next/image";
 
-const ImagePicker = ({ onFileAccepted }) => {
-  const onDrop = useCallback(
+const ImagePicker = ({ onFileAccepted, width, height }) => {
+    const onDrop = useCallback(
     (acceptedFiles) => {
       onFileAccepted(acceptedFiles);
     },
@@ -21,8 +21,8 @@ const ImagePicker = ({ onFileAccepted }) => {
   return (
     <div
       {...getRootProps()}
-      className="border-[3px] w-[240px] h-[240px] flex justify-center items-center rounded-[8px] border-blue-300 bg-blue-50 cursor-pointer border-dashed"
-    >
+      className="border-[3px] flex justify-center items-center rounded-[8px] border-blue-300 bg-blue-50 cursor-pointer border-dashed"
+      style={{ width: width, height: height }}    >
       <input {...getInputProps()} />
       {isDragActive ? (
         <div className="flex flex-col items-center justify-center">

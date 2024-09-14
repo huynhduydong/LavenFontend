@@ -15,9 +15,7 @@ export function CustomViewDialog({ itemTrigger, title, itemContent }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <button>{itemTrigger}</button>
-      </DialogTrigger>
+            <DialogTrigger asChild>{itemTrigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] w-2/3 bg-gray-100">
         <DialogHeader>
           <DialogTitle>

@@ -41,7 +41,11 @@ export const ProductInfoForm = ({
               Ảnh sản phẩm
             </div>
             <div className="flex flex-row items-center justify-center p-[16px] bg-white rounded-[8px] border-[1.5px] border-gray-300 mt-[24px]">
-              <ImagePicker onFileAccepted={onFileAccepted} />
+            <ImagePicker
+                onFileAccepted={onFileAccepted}
+                width={"240px"}
+                height={"240px"}
+              />              
               <div className=" flex items-center justify-center">
                 <div className="w-[240px] h-[240px]">
                 {productThumbnailUrl && selectedFiles.length <= 0 && (

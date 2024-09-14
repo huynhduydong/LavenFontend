@@ -19,6 +19,8 @@ export function CustomUpdateDialog({
   onConfirm,
   onCancel,
   confirmContent,
+  confirmDialogTitle,
+  confirmDialogContent,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -62,8 +64,8 @@ export function CustomUpdateDialog({
                   {confirmContent}
                 </button>
               }
-              title={"Bạn có chắc chắn muốn cập nhật sản phẩm này?"}
-              content={"Thông tin của sản phẩm sẽ được cập nhật."}
+              title={confirmDialogTitle}
+              content={confirmDialogContent}
               onConfirm={() => {
                 setOpen(false);
                 onConfirm && onConfirm();
