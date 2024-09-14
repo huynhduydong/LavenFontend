@@ -27,8 +27,8 @@ const Page = () => {
   return (
     <>
       {product && (
-        <div className="bg-detail px-32 h-screen">
-          <BreadCrumb />
+        <div className="bg-gray-100 px-32">
+                    <BreadCrumb />
           <div className="flex p-0 bg-white gap-8">
             <section className="shrink-0 p-4 block" style={{ width: "450px" }}>
               <ProductImage product={product} />

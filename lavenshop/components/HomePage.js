@@ -9,6 +9,7 @@ import BorderSide from "@/components/custom/BorderSide";
 import CarouselPromotion from "@/components/custom/CarouselPromotion";
 import ProductCard from "@/components/custom/ProductCard";
 import CategoryCard from "@/components/custom/CategoryCard";
+import { getCategories } from "@/services/categoryServices";
 import {
   Pagination,
   PaginationContent,
@@ -22,59 +23,11 @@ import { Button } from "@/components/ui/button";
 import { getListProduct } from "@/services/productServices";
 import { ArrowUp } from "@/components/icons/arrow-up";
 
-const arrCategory = [
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/Tren_20_trieu_cate_thumb_9464481b81.png",
-    name: "Điện thoại",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/180x0/filters:quality(100)/laptop_cate_thumb_f8bef6898b.png",
-    name: "Laptop",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/may_tinh_bang_cate_thumb_00e3b3eefa.png",
-    name: "Máy tính bảng",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/dien_gia_dung_cate_thumb_b41130e09c.png",
-    name: "Hàng gia dụng",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/may_lanh_tu_lanh_cate_thumb_8251a4da68.png",
-    name: "Máy lạnh - điều hòa",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/180x0/filters:quality(100)/laptop_cate_thumb_f8bef6898b.png",
-    name: "Laptop",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/Tren_20_trieu_cate_thumb_9464481b81.png",
-    name: "Điện thoại",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/180x0/filters:quality(100)/laptop_cate_thumb_f8bef6898b.png",
-    name: "Laptop",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/may_tinh_bang_cate_thumb_00e3b3eefa.png",
-    name: "Máy tính bảng",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/dien_gia_dung_cate_thumb_b41130e09c.png",
-    name: "Hàng gia dụng",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/96x0/filters:quality(100)/may_lanh_tu_lanh_cate_thumb_8251a4da68.png",
-    name: "Máy lạnh - điều hòa",
-  },
-  {
-    url: "https://cdn2.fptshop.com.vn/unsafe/180x0/filters:quality(100)/laptop_cate_thumb_f8bef6898b.png",
-    name: "Laptop",
-  }
-];
+
 
 const HomePage = () => {
   const [productList, setProductList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(24);
   const [totalItems, setTotalItems] = useState();
@@ -84,9 +37,15 @@ const HomePage = () => {
     setProductList(data.content);
     setTotalItems(data.totalElements);
   };
+  const getCategoryData = async () => {
+    const data = await getCategories();
+    console.log(">>> check cate:", data);
+    setCategoryList(data.content);
+  };
 
   useEffect(() => {
     getProductData();
+    getCategoryData();
   }, [currentPage]);
 
   const scrollToTop = () => {
@@ -94,8 +53,8 @@ const HomePage = () => {
   };
   return (
     <div className="bg-gray-100">
-     {/* Badges */}
-     <div className="flex justify-center pt-4 mx-24">
+      {/* Badges */}
+      <div className="flex justify-center pt-4 mx-24">
         <div className="flex flex-grow justify-center gap-11 p-4 bg-white rounded-md">
           <div className="flex items-center gap-2">
             <Avatar className="bg-primary flex justify-center items-center text-white">
@@ -219,8 +178,8 @@ const HomePage = () => {
       </div>
 
 
-       {/* Promotion */}
-       <div className="flex justify-center pt-4 mx-24">
+      {/* Promotion */}
+      <div className="flex justify-center pt-4 mx-24">
         <div className="flex flex-grow justify-center p-4 bg-white rounded-md">
           <div className="flex gap-1 w-fit ">
             <div className="w-full">
@@ -230,12 +189,12 @@ const HomePage = () => {
         </div>
       </div>
 
-     {/* Category */}
-     <div className="flex items-center justify-center pt-4 mx-24">
+      {/* Category */}
+      <div className="flex items-center justify-center pt-4 mx-32">
         <div className="flex-grow grid grid-cols-6 gap-2 bg-white p-4 rounded-md">
-          {arrCategory.map((item, index) => (
-            <Link href="/category" key={index}>
-              <CategoryCard categoryItem={item} />
+          {categoryList.map((item, index) => (
+            <Link href={`/category/${item.urlKey}/${item.id}`} key={index}>
+                            <CategoryCard categoryItem={item} />
             </Link>
           ))}
         </div>
@@ -243,7 +202,7 @@ const HomePage = () => {
 
       {/* Products */}
       <div className="flex flex-wrap mx-24 gap-3 justify-start mt-5">
-                {productList.map((item, index) => (
+        {productList.map((item, index) => (
           <Link href={`/product/${item.productSlug}/${item.id}`} key={index}>
             <ProductCard id={item.id} product={item} />
           </Link>
