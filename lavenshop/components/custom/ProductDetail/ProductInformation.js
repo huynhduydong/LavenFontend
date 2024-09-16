@@ -1,7 +1,101 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { convertPrice } from "@/utils/convertPrice";
+import { Button } from "@/components/ui/button";
+import { addToCart, getCart } from "@/services/cartServices";
 
 export const ProductInformation = ({ product }) => {
+  const [quantity, setQuantity] = useState(1);
+  const [productItemId, setProductItemId] = useState(null);
+  const [productId, setProductId] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [optionsValue, setOptionsValue] = useState([]);
+
+  const handleAddToCart = async () => {
+    const productsInCart = await getCart();
+    let finalQuantity = quantity;
+
+    if (productsInCart.length === 0) {
+      await addToCart(productItemId, productId, finalQuantity);
+      return;
+    }
+
+    for (let i = 0; i < productsInCart.length; i++) {
+      if (product.id === productsInCart[i].id) {
+        if (productsInCart[i].option) {
+          let productsInCartOptions = [];
+          for (let j = 0; j < productsInCart[i].option.length; j++) {
+            productsInCartOptions.push(productsInCart[i].option[j].id);
+          }
+          if (productsInCartOptions.toString() === productItemId.toString()) {
+            finalQuantity += productsInCart[i].quantity;
+          }
+        }
+      }
+    }
+
+    console.log({ productItemId, productId, finalQuantity });
+
+    await addToCart(productItemId, productId, finalQuantity);
+  };
+
+  const incQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const decQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    } else {
+      setQuantity(1);
+    }
+  };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     setAccessToken(await getAccessToken());
+  //   })();
+  // }, []);
+
+  useEffect(() => {
+    if (product && product.options && product.options.length > 0) {
+      let result = [];
+      for (let i = 0; i < product.options.length; i++) {
+        result.push(product.options[i].name);
+      }
+
+      result = result.filter((value, index, array) => {
+        return array.indexOf(value) === index;
+      });
+
+      let optionsValue = [];
+      let initProductItemId = [];
+      for (let i = 0; i < result.length; i++) {
+        let value = [];
+        for (let j = 0; j < product.options.length; j++) {
+          if (result[i] === product.options[j].name) {
+            const temp = {
+              id: product.options[j].id,
+              value: product.options[j].value,
+            };
+
+            value.push(temp);
+          }
+        }
+        optionsValue.push(value);
+        initProductItemId.push(optionsValue[i][0].id);
+      }
+
+      setOptions(result);
+      setOptionsValue(optionsValue);
+      setProductItemId(initProductItemId);
+    } else if (product && product.options && product.options.length === 0) {
+      setProductId(product.id);
+    }
+  }, [product]);
+
+  // console.log(productItemId.toString());
+  // console.log(accessToken);
+
   return (
     <>
       {product && (
@@ -63,66 +157,75 @@ export const ProductInformation = ({ product }) => {
             </div>
           </div>
           {/* Product Option */}
-          <div className="mt-6 px-5 pb-4 flex items-center">
-            <div className="flex flex-col">
-              <div className="flex items-center">
-                <div className="w-28 mt-2 text-gray-500">Màu: </div>
-                {product &&
-                  product.options &&
-                  product.options.map((productOptions) => (
-                    <div
-                      key={productOptions.id}
-                      className="flex items-center gap-4 text-sm"
-                    >
-                      <div className="flex items-center">
-                        {productOptions.value &&
-                          productOptions.value.split(",").map((item) => (
-                            <button
-                              key={item}
-                              style={{
-                                border: "1px solid rgba(0, 0, 0, .09)",
-                              }}
-                              className="inline-flex mt-2 mr-2 p-2 px-4 rounded-sm items-center justify-center min-h-10 min-w-20"
-                            >
-                              {item}
-                            </button>
-                          ))}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-
-              <section className="flex items-center gap-4 text-sm mt-6 h-8">
-                <div className="w-28 mt-2 text-gray-500">Số lượng </div>
-                <div className="flex items-center">
-                  <button
-                    style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
-                    className="inline-flex mt-2 p-2 rounded-sm items-center justify-center w-8"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    value={1}
-                    style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
-                    className="inline-flex mt-2 p-2 w-12 text-center"
-                  />
-                  <button
-                    style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
-                    className="inline-flex mt-2 p-2 rounded-sm items-center justify-center w-8"
-                  >
-                    +
-                  </button>
-                  <label className="text-gray-500 items-center inline-flex ms-4 mt-2">
-                    9999 sản phẩm có sẵn
-                  </label>
+          <div className="flex flex-col mt-4 gap-4">
+            {options &&
+              options.map((option, index) => (
+                <div
+                  key={`option-${index}`}
+                  className="flex gap-3 items-center"
+                >
+                  <div className="w-24 text-gray-500 text-sm">{option}:</div>
+                  <div className="flex flex-wrap gap-3">
+                    {optionsValue[index].map((optionValue, idx) => {
+                      return (
+                        <Button
+                          key={optionValue.id}
+                          variant="outline"
+                          className={
+                            optionValue.id === productItemId[index]
+                              ? "border-primary text-primary"
+                              : ""
+                          }
+                          onClick={() => {
+                            let newProductItemId = [...productItemId];
+                            newProductItemId[index] = optionValue.id;
+                            setProductItemId(newProductItemId);
+                          }}
+                        >
+                          {optionValue.value}
+                        </Button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </section>
+              ))}
+          </div>
+          {/* Quantity */}
+          <div className="flex items-center gap-4 text-sm mt-6 h-8">
+            <div className="w-28 mt-2 text-gray-500">Số lượng </div>
+            <div className="flex items-center">
+              <button
+                style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
+                className="inline-flex mt-2 p-2 rounded-sm items-center justify-center w-8"
+                onClick={() => decQuantity()}
+              >
+                -
+              </button>
+              <input
+                type="text"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
+                className="inline-flex mt-2 p-2 w-12 text-center"
+              />
+              <button
+                style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
+                className="inline-flex mt-2 p-2 rounded-sm items-center justify-center w-8"
+                onClick={() => incQuantity()}
+              >
+                +
+              </button>
+              <label className="text-gray-500 items-center inline-flex ms-4 mt-2">
+                9999 sản phẩm có sẵn
+              </label>
             </div>
           </div>
           {/* Add To Cart */}
           <div className="mt-4 flex w-100 pt-5 pl-5 pr-9 text-sm">
-            <button className="inline-flex items-center bg-orange-100 border border-red-500 text-red-500 px-5 py-3 mr-4">
+            <button
+              className="inline-flex items-center bg-orange-100 border border-red-500 text-red-500 px-5 py-3 mr-4"
+              onClick={() => handleAddToCart()}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
