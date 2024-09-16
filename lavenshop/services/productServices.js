@@ -79,4 +79,24 @@ const deleteProductById = async (id) => {
     return error.response;
   }
 };
-export { getListProduct, getProductById,createProduct,updateProductById,deleteProductById };
+const searchProductByName = async (name, pageNo, pageSize, sortBy, sortDir) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/v1/products/search?name=${name}`,
+      {
+        params: {
+          pageNo,
+          pageSize,
+          sortBy,
+          sortDir,
+        },
+      }
+    );
+    if (res && res.data) {
+      return res.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+export { getListProduct, getProductById,createProduct,updateProductById,deleteProductById,searchProductByName };
