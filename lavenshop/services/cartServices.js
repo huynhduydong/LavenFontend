@@ -115,3 +115,23 @@ export const deleteCart = async (productId, productItemId) => {
             console.log(error);
         });
 };
+export const deleteAllCart = async () => {
+    let config = {
+      method: "delete",
+      maxBodyLength: Infinity,
+      url: "http://localhost:8080/api/v1/carts/all",
+      headers: {
+        "X-Auth-User-Id": "1",  
+    },
+      
+    };
+    try {
+      const response = axios.request(config);
+  
+      if (response) {
+        return response;
+      }
+    } catch (error) {
+      return error;
+    }
+  };

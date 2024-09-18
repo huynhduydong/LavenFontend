@@ -44,7 +44,7 @@ const RegisterPage = () => {
         {/* Logo */}
         <Image
           src={logo2}
-          alt="Harbe Logo"
+          alt="Laven Logo"
           priority={true}
           className="h-auto w-[600px]"
         ></Image>

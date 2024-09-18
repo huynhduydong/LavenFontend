@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { getCart, updateCart, deleteCart } from "@/services/cartServices";
 import { convertPrice } from "@/utils/convertPrice";
-
+import { useRouter } from "next/navigation";
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
-
+  const router = useRouter();
   const fetchCartItems = async () => {
       setCartItems(await getCart());
   };
@@ -69,11 +69,11 @@ export default function CartPage() {
     for (let i = 0; i < cartItems.length; i++) {
       total +=
         cartItems[i].price *
-        (1 - cartItems[i].discountRate) *
+        (100 - cartItems[i].discountRate) *
         cartItems[i].quantity;
     }
-    return total;
-  };
+    return total / 100;
+    };
 
   console.log(cartItems);
 
@@ -89,7 +89,7 @@ export default function CartPage() {
           />
           <div className="font-medium">Giỏ hàng đang trống!</div>
           <div>
-            Bạn tham khảo thêm các sản phẩm được Harbe gợi ý bên dưới nhé!
+            Bạn tham khảo thêm các sản phẩm được Laven gợi ý bên dưới nhé!
           </div>
         </div>
       )}
@@ -277,7 +277,12 @@ export default function CartPage() {
                 <span className="text-primary text-lg">
                   đ{convertPrice(calculateTotalPrice())}
                 </span>
-                <button className="px-16 bg-primary text-white py-3 rounded-md ms-8">
+                <button
+                  className="px-16 bg-primary text-white py-3 rounded-md ms-8"
+                  onClick={() => {
+                    router.push(`/purchase`);
+                  }}
+                >
                   Mua hàng
                 </button>
               </td>

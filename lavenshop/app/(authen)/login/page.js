@@ -115,7 +115,7 @@ export default function LoginPage() {
           </div>
 
           <div className="flex flex-row justify-center items-center mt-[32px] text-[14px] text-gray-500">
-            <div>Bạn mới biết đến Harbe?</div>
+            <div>Bạn mới biết đến Laven?</div>
             <Link href={"/register"}>
               <div className="ml-[6px] text-blue-600 hover:decoration-solid hover:underline">
                 Đăng ký

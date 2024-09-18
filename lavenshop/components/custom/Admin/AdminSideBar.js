@@ -25,7 +25,7 @@ const AdminSideBar = ({ menu, others }) => {
   return (
     <div className="bg-black px-[32px] py-[16px] flex flex-col items-center">
       <Link href="/">
-        <Image alt="Harbe Logo" priority={true} src={logo} width={160} />
+        <Image alt="Laven Logo" priority={true} src={logo} width={160} />
       </Link>
       <div className="flex flex-col justify-center h-fit mt-[64px]">
         <div className="text-gray-400 font-semibold text-[14px]">MENU</div>
