@@ -76,7 +76,9 @@ const Page = () => {
                     className={isFullDescription ? "ml-4" : "ml-4 line-clamp-3"}
                   >
                     {product.description.split("\n").map((str, index) => (
-                      <p key={`string-${index}`}>{str}</p>
+                       <span key={`string-${index}`} className="block">
+                       {str}
+                     </span>
                     ))}
                   </p>
                   <Button

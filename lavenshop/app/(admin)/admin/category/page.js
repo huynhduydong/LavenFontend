@@ -8,21 +8,21 @@ import icPlus from "@/public/ic_admin/ic_plus.svg";
 import icEditBlue from "@/public/ic_admin/ic_edit_blue.svg";
 import icBin from "@/public/ic_admin/ic_bin.svg";
 import { PaginationSelection } from "@/components/HomePage";
-import { CustomCreateDialog } from "@/components/custom/Admin/CustomCreateDialog";
 import { uploadCategoryImage } from "@/services/firebaseService";
-import { getAccessToken, getSession } from "@/services/authServices";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CustomUpdateDialog } from "@/components/custom/Admin/CustomUpdateDialog";
-import { CustomAlertDialog } from "@/components/custom/Admin/CustomAlertDialog";
 import {
   createCategory,
   deleteCategoryById,
   getCategories,
   getCategoryById,
+  searchCategoryByName,
   updateCategoryById,
 } from "@/services/categoryServices";
 import CategoryAdminCard from "@/components/custom/Admin/CategoryAdminCard";
+import { CustomCreateDialog } from "@/components/custom/Admin/CustomCreateDialog";
+import { CustomUpdateDialog } from "@/components/custom/Admin/CustomUpdateDialog";
+import { CustomAlertDialog } from "@/components/custom/Admin/CustomAlertDialog";
 import { CustomViewDialog } from "@/components/custom/Admin/CustomViewDialog";
 import { CategoryInfoForm } from "@/components/custom/Admin/CategoryInfoForm";
 import CustomTable from "@/components/custom/Admin/CustomTable";
@@ -40,18 +40,29 @@ const CategoryAdminPage = () => {
     { name: "Số lượng", width: "9.5%" },
   ];
   const [currentPage, setCurrentPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(14);
-  const [totalItems, setTotalItems] = useState();
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [totalItems, setTotalItems] = useState(0);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(-1);
   const [categoryName, setCategoryName] = useState("");
-  const [categoryWithProducts, setCategoryWithProducts] = useState(null);
+  const [categoryWithProducts, setCategoryWithProducts] = useState();
+  const [searchValue, setSearchValue] = useState("");
+
+  const getSearchCategoryData = async () => {
+    const data = await searchCategoryByName(
+      searchValue,
+      currentPage,
+      itemsPerPage
+    );
+    setCategoryList(data.content);
+    // setTotalItems(data.totalElements);
+  };
 
   const getCategoryData = async () => {
-    const data = await getCategories();
+    const data = await getCategories(currentPage, itemsPerPage);
     setCategoryList(data.content);
-    setTotalItems(data.length);
+    setTotalItems(data.totalElements);
   };
 
   const getCategoryWithProducts = async (id) => {
@@ -68,7 +79,11 @@ const CategoryAdminPage = () => {
   };
 
   useEffect(() => {
-    getCategoryData();
+    if (searchValue && searchValue.length > 0) {
+      getSearchCategoryData();
+    } else {
+      getCategoryData();
+    }
   }, [currentPage]);
 
   console.log(categoryList);
@@ -78,14 +93,26 @@ const CategoryAdminPage = () => {
       {/* Search bar */}
       <div className="flex flex-row items-center w-full border-b-[1px] border-gray-300 px-[32px] py-[10px]">
         <div className="flex flex-row items-center mr-[64px]">
-          <div className="text-[18px] font-semibold">All categories</div>
+          <div className="text-[18px] font-semibold">Tổng phân loại</div>
           <div className="px-[8px] py-[1px] bg-blue-600 text-white text-[14px] rounded-[16px] ml-[12px] flex items-center justify-center">
             {totalItems}
           </div>
         </div>
 
         <div className="grow">
-          <SearchInput placeholder={"Nhập từ khóa..."} />
+          <SearchInput
+            placeholder={"Nhập từ khóa tên phân loại..."}
+            value={searchValue}
+            onValueChange={(e) => setSearchValue(e.target.value)}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (searchValue && searchValue.length > 0) {
+                await getSearchCategoryData();
+              } else {
+                await getCategoryData();
+              }
+            }}
+          />
         </div>
 
         <div className="flex flex-row justify-center items-center gap-[16px] ml-[24px]">
@@ -95,6 +122,7 @@ const CategoryAdminPage = () => {
               <button
                 className="border-blue-600 border-[1px] px-[20px] py-[6px] rounded-[8px] hover:drop-shadow-xl hover:opacity-80 flex flex-row items-center justify-center bg-blue-50 w-[110px]"
                 style={{ opacity: selectedCategory != -1 ? 1 : 0 }}
+                disabled={selectedCategory == -1}
                 onClick={async () => {
                   resetState();
                   await getCategoryWithProducts(
@@ -113,12 +141,12 @@ const CategoryAdminPage = () => {
             itemContent={
               <div className="w-full">
                 {/* Product count */}
-                <div className="flex flex-row items-center mr-[64px] mt-[16px]">
+                <div className="flex flex-row items-center mr-[64px] mt-[8px] mb-[16px]">
                   <div className="text-[16px] font-semibold text-black">
-                    Product
+                    Tổng sản phẩm
                   </div>
                   <div className="px-[8px] py-[1px] bg-blue-600 text-white text-[14px] rounded-[16px] ml-[12px] flex items-center justify-center">
-                    {categoryWithProducts?.products.length}
+                    {categoryWithProducts?.products?.length}
                   </div>
                 </div>
 
@@ -140,11 +168,12 @@ const CategoryAdminPage = () => {
           <CustomAlertDialog
             itemTrigger={
               <button
-                className="border-warning border-[1px] px-[20px] py-[6px] rounded-[8px] hover:drop-shadow-xl hover:opacity-80 flex flex-row items-center justify-center bg-red-50 w-[110px]"
+                className="border-red-500 border-[1px] px-[20px] py-[6px] rounded-[8px] hover:drop-shadow-xl hover:opacity-80 flex flex-row items-center justify-center bg-red-50 w-[110px]"
                 style={{ opacity: selectedCategory != -1 ? 1 : 0 }}
+                disabled={selectedCategory == -1}
               >
                 <Image alt="Bin icon" src={icBin} width={12} height={12} />
-                <div className="text-warning text-[14px] font-bold ml-[4px]">
+                <div className="text-red-500 text-[14px] font-bold ml-[4px]">
                   Xóa
                 </div>
               </button>
@@ -157,9 +186,9 @@ const CategoryAdminPage = () => {
             confirmContent={"Xóa"}
             onConfirm={async () => {
               console.log("Confirm delete category");
-              
+              let token = "";
+             
               const res = await deleteCategoryById(
-              
                 categoryList[selectedCategory].id
               );
               console.log(res);
@@ -220,6 +249,7 @@ const CategoryAdminPage = () => {
               <button
                 className="border-blue-600 border-[1px] px-[20px] py-[6px] rounded-[8px] hover:drop-shadow-xl hover:opacity-80 flex flex-row items-center justify-center bg-blue-50 w-[110px]"
                 style={{ opacity: selectedCategory != -1 ? 1 : 0 }}
+                disabled={selectedCategory == -1}
                 onClick={() => {
                   resetState();
                   setCategoryName(categoryList[selectedCategory].name);
@@ -271,12 +301,11 @@ const CategoryAdminPage = () => {
                   name: categoryName,
                   thumbnailUrl: imgURL,
                 },
-                
               );
               console.log(res);
               if (res.status == 201) {
                 toast.success("Tạo phân loại thành công");
-                await getCategoryData();
+                await getCategoryData(currentPage, itemsPerPage);
                 setSelectedCategory(-1);
                 resetState();
               } else {
@@ -312,8 +341,8 @@ const CategoryAdminPage = () => {
       </div>
 
       {/* Category data */}
-      <div className="flex flex-col justify-between items-center grow px-[32px] py-[20px] w-full">
-        <div className="w-full flex flex-wrap gap-[10px]">
+      <div className="flex flex-col justify-between items-center grow px-[32px] py-[16px] w-full">
+        <div className="w-full flex flex-wrap gap-[12px]">
           {categoryList.map((item, index) => (
             <div key={index}>
               <CategoryAdminCard

@@ -7,6 +7,7 @@ import {
   deleteProductById,
   getListProduct,
   updateProductById,
+  searchProductByName
 } from "@/services/productServices";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -18,13 +19,11 @@ import ProductRow from "@/components/custom/Admin/ProductRow";
 import CustomTable from "@/components/custom/Admin/CustomTable";
 import { CustomCreateDialog } from "@/components/custom/Admin/CustomCreateDialog";
 import { uploadFile } from "@/services/firebaseService";
-import { getAccessToken, getSession } from "@/services/authServices";
 import { ProductInfoForm } from "@/components/custom/Admin/ProductInfoForm";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CustomUpdateDialog } from "@/components/custom/Admin/CustomUpdateDialog";
 import { CustomAlertDialog } from "@/components/custom/Admin/CustomAlertDialog";
-
 const ProductAdminPage = () => {
   const [productList, setProductList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -32,7 +31,7 @@ const ProductAdminPage = () => {
   const [totalItems, setTotalItems] = useState();
   const productField = [
   { name: "Ảnh", width: "6%" },
-    { name: "Tên", width: "36%" },
+    { name: "Tên sản phẩm", width: "36%" },
     { name: "Hãng", width: "11%" },
     { name: "Giá", width: "11%" },
     { name: "Giảm giá", width: "7%" },
@@ -51,7 +50,7 @@ const ProductAdminPage = () => {
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [productBrand, setProductBrand] = useState("");
-
+  const [searchValue, setSearchValue] = useState("");
   const getProductData = async () => {
     const data = await getListProduct(currentPage, itemsPerPage);
     setProductList(data.content);
@@ -61,7 +60,15 @@ const ProductAdminPage = () => {
   const handleFileAccepted = (files) => {
     setSelectedFiles(files);
   };
-
+  const getSearchProductData = async () => {
+    const data = await searchProductByName(
+      searchValue,
+      currentPage,
+      itemsPerPage
+    );
+    setProductList(data.content);
+    setTotalItems(data.totalElements);
+  };
   const resetState = () => {
     setSelectedFiles([]);
     setProductOptionList([]);
@@ -85,22 +92,38 @@ const ProductAdminPage = () => {
   // }, []);
 
   useEffect(() => {
-    getProductData();
-  }, [currentPage]);
+    if (searchValue && searchValue.length > 0) {
+      getSearchProductData();
+    } else {
+      getProductData();
+    }  }, [currentPage]);
 
   return (
     <div className="flex flex-col justify-between items-center h-full">
       {/* Search bar */}
       <div className="flex flex-row items-center w-full border-b-[1px] border-gray-300 px-[32px] py-[10px]">
         <div className="flex flex-row items-center mr-[64px]">
-          <div className="text-[18px] font-semibold">All products</div>
-          <div className="px-[8px] py-[1px] bg-blue-600 text-white text-[14px] rounded-[16px] ml-[12px] flex items-center justify-center">
+        <div className="text-[18px] font-semibold">Tổng sản phẩm</div>
+                  <div className="px-[8px] py-[1px] bg-blue-600 text-white text-[14px] rounded-[16px] ml-[12px] flex items-center justify-center">
             {totalItems}
           </div>
         </div>
 
         <div className="grow">
-          <SearchInput placeholder={"Nhập từ khóa..."} />
+
+        <SearchInput
+            placeholder={"Nhập từ khóa tên sản phẩm..."}
+            value={searchValue}
+            onValueChange={(e) => setSearchValue(e.target.value)}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (searchValue && searchValue.length > 0) {
+                await getSearchProductData();
+              } else {
+                await getProductData();
+              }
+            }}
+          />
         </div>
 
         <div className="flex flex-row justify-center items-center gap-[16px] ml-[64px]">

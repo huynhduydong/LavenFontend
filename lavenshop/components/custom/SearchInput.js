@@ -1,22 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import React, {  useState } from "react";
+import { Separator } from "@/components/ui/separator";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-const SearchInput = ({ placeholder }) => {
-  const [searchValue, setSearchValue] = useState("");
-
-  const router = useRouter();
-
-  const handleSearchProduct = async () => {
-    router.push("/search?name=" + searchValue);
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      handleSearchProduct();
-    }
-  };
+const SearchInput = ({ placeholder, value, onValueChange, onSubmit }) => {
   return (
     <div>
       <label
@@ -44,23 +32,23 @@ const SearchInput = ({ placeholder }) => {
           </svg>
         </div>
 
-        <input
-          type="search"
-          id="default-search"
-          className="pr-20 block w-full p-2.5 ps-10 text-sm text-gray-900 border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:border-blue-500 border-2"
-          placeholder={placeholder}
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+        <form onSubmit={onSubmit}>
+          <input
+            type="search"
+            id="default-search"
+            className="pr-20 block w-full p-2.5 ps-10 text-sm text-gray-900 border-gray-300 rounded-lg bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:border-blue-500 border-2"
+            placeholder={placeholder}
+            value={value}
+            onChange={onValueChange}
+          />
 
-        <button
-          type="submit"
-          className="absolute top-0 end-0 p-2.5 text-sm h-full text-primary bg-transparent rounded-e-lg border-0 border-gray-300 hover:bg-blue-200 focus:ring-blue-300 dark:bg-primary dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          onClick={handleSearchProduct}
-        >
-          Tìm kiếm
-        </button>
+          <button
+            type="submit"
+            className="absolute top-0 end-0 p-2.5 text-sm h-full text-primary bg-transparent rounded-e-lg border-0 border-gray-300 hover:bg-blue-200 focus:ring-blue-300 dark:bg-primary dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Tìm kiếm
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -68,11 +68,29 @@ const deleteCategoryById = async ( id) => {
     return error.response;
   }
 };
-
+const searchCategoryByName = async (name, pageNo, pageSize) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/v1/categories/search?name=${name}`,
+      {
+        params: {
+          pageNo,
+          pageSize,
+        },
+      }
+    );
+    if (res && res.data) {
+      return res.data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 export {
   getCategories,
   getCategoryById,
   createCategory,
   updateCategoryById,
   deleteCategoryById,
+  searchCategoryByName
 };

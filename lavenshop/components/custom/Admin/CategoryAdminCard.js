@@ -14,12 +14,12 @@ const CategoryAdminCard = ({
         <div className="p-[4px] text-white rounded-[12px] flex items-center justify-center bg-white">
           <img
             src={category.thumbnailUrl}
-            className="w-[120px] h-[120px] rounded-[8px]"
-          />
+            className="w-[148px] h-[148px] rounded-[8px]"
+                      />
         </div>
       </div>
-      <div className="text-[15px] font-semibold max-w-[120px] line-clamp-1 mt-[4px]">
-        {category.name}
+      <div className="text-[15px] font-semibold max-w-[140px] line-clamp-1 mt-[4px]">
+                {category.name}
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import SearchInput from "./custom/SearchInput";
@@ -6,8 +8,16 @@ import DialogAddress from "./custom/DialogAddress";
 import BorderSide from "./custom/BorderSide";
 import Link from "next/link";
 import { nunito } from "./ui/fonts";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const [searchValue, setSearchValue] = useState("");
+  const router = useRouter();
+  const handleSearchProduct = async (event) => {
+  event.preventDefault();
+  router.push("/search?name=" + searchValue);
+};
   return (
     <div className="flex justify-center px-32">
       <div className="pb-1 pt-2 bg-white grid grid-cols-12 items-start">
@@ -27,8 +37,12 @@ const Header = () => {
           <div className="flex justify-center items-center gap-10 pl-10">
             {/* Search */}
             <div className="flex-grow pr-10">
-              <SearchInput placeholder={"Freeship mọi đơn"} />
-            </div>
+            <SearchInput
+          placeholder={"Bạn tìm gì hôm nay"}
+          value={searchValue}
+          onValueChange={(e) => setSearchValue(e.target.value)}
+          onSubmit={handleSearchProduct}
+        />            </div>
 
             {/* Buttons */}
             <div className="grid grid-cols-3 items-center gap-8 text-sm justify-end">
