@@ -16,7 +16,6 @@ import icEditBlue from "@/public/ic_admin/ic_edit_blue.svg";
 import icBin from "@/public/ic_admin/ic_bin.svg";
 import { PaginationSelection } from "@/components/HomePage";
 import ProductRow from "@/components/custom/Admin/ProductRow";
-import CustomTable from "@/components/custom/Admin/CustomTable";
 import { CustomCreateDialog } from "@/components/custom/Admin/CustomCreateDialog";
 import { uploadFile } from "@/services/firebaseService";
 import { ProductInfoForm } from "@/components/custom/Admin/ProductInfoForm";
@@ -24,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CustomUpdateDialog } from "@/components/custom/Admin/CustomUpdateDialog";
 import { CustomAlertDialog } from "@/components/custom/Admin/CustomAlertDialog";
+import CustomTable from "@/components/custom/Admin/Table/CustomTable";
 const ProductAdminPage = () => {
   const [productList, setProductList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);

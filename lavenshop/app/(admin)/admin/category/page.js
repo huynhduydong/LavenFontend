@@ -25,8 +25,8 @@ import { CustomUpdateDialog } from "@/components/custom/Admin/CustomUpdateDialog
 import { CustomAlertDialog } from "@/components/custom/Admin/CustomAlertDialog";
 import { CustomViewDialog } from "@/components/custom/Admin/CustomViewDialog";
 import { CategoryInfoForm } from "@/components/custom/Admin/CategoryInfoForm";
-import CustomTable from "@/components/custom/Admin/CustomTable";
 import ProductRow from "@/components/custom/Admin/ProductRow";
+import CustomTable from "@/components/custom/Admin/Table/CustomTable";
 
 const CategoryAdminPage = () => {
   const productField = [

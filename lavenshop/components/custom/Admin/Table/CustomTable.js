@@ -1,6 +1,3 @@
-import { Checkbox } from "@radix-ui/react-checkbox";
-import { CustomCheckbox } from "./CustomCheckbox";
-
 const CustomTable = ({ data, renderRow, field }) => {
   return (
     <table className="text-left border-0 border-collapse table-fixed w-full">

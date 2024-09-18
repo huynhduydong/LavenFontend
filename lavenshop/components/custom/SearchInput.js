@@ -4,9 +4,10 @@ import { Separator } from "@/components/ui/separator";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-const SearchInput = ({ placeholder, value, onValueChange, onSubmit }) => {
+const SearchInput = ({ placeholder, value, onValueChange, onSubmit ,disabled,
+  opacity,}) => {
   return (
-    <div>
+    <div style={{ opacity: opacity ? opacity : "1" }}>
       <label
         htmlFor="default-search"
         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -40,6 +41,8 @@ const SearchInput = ({ placeholder, value, onValueChange, onSubmit }) => {
             placeholder={placeholder}
             value={value}
             onChange={onValueChange}
+            disabled={disabled || false}
+
           />
 
           <button
