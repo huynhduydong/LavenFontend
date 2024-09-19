@@ -11,6 +11,7 @@ import icExit from "@/public/ic_admin/ic_exit.svg";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
+import icNotification from "@/public/ic_admin/ic_notification.svg";
 
 export default function AdminLayout({ children }) {
   const menu = [
@@ -18,6 +19,8 @@ export default function AdminLayout({ children }) {
     { name: "Product", icon: icProduct, link: "/admin/product" },
     { name: "Category", icon: icTag, link: "/admin/category" },
     { name: "Order", icon: icOrder, link: "/admin/order" },
+    { name: "Notification", icon: icNotification, link: "/admin/notification" },
+
   ];
 
   const others = [
