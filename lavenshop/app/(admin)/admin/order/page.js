@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAllOrders } from "@/services/orderSevice";
 import OrderRow from "@/components/custom/Admin/Table/OrderRow";
 import CustomTable from "@/components/custom/Admin/Table/CustomTable";
+import { getAccessToken } from "@/services/authServices";
+
 const OrderAdminPage = () => {
   const [orderList, setOrderList] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -23,8 +25,13 @@ const OrderAdminPage = () => {
     { name: "Phí vận chuyển", width: "13%" },
   ];
   const getOrderData = async () => {
-    
-    const data = await getAllOrders( currentPage, itemsPerPage);
+    let token = "";
+    try {
+      token = await getAccessToken();
+    } catch (error) {
+      console.log(error);
+    }
+    const data = await getAllOrders( token, currentPage, itemsPerPage);
     console.log("data", data);
     setOrderList(data?.orderList);
     setTotalItems(data?.totalElements);

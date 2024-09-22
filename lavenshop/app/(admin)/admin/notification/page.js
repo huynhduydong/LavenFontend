@@ -25,6 +25,7 @@ import { CustomAlertDialog } from "@/components/custom/Admin/CustomAlertDialog";
 import { NotificationInfoForm } from "@/components/custom/Admin/Form/NotificationForm";
 import NotificationRow from "@/components/custom/Admin/Table/NotificationRow";
 import { CustomViewDialog } from "@/components/custom/Admin/CustomViewDialog";
+import { getAccessToken } from "@/services/authServices";
 
 const NotificationAdminPage = () => {
   const [notificationList, setNotificationList] = useState([]);
@@ -49,8 +50,13 @@ const NotificationAdminPage = () => {
     );
     console.log("Search:", data);
     setNotificationList(data.content);
-    
-    const shockNoti = await getShockNotificationById(2);
+    let token = "";
+    try {
+      token = await getAccessToken();
+    } catch (error) {
+      console.log(error);
+    }
+    const shockNoti = await getShockNotificationById(token, 2);
     console.log("Shock notification: ", shockNoti);
     setNotificationList((prevData) => {
       const updatedData = [...prevData];
@@ -66,8 +72,13 @@ const NotificationAdminPage = () => {
     const data = await getAllNotifications(currentPage, itemsPerPage);
     console.log(data);
     setNotificationList(data?.content);
-   
-    const shockNoti = await getShockNotificationById(2);
+    let token = "";
+    try {
+      token = await getAccessToken();
+    } catch (error) {
+      console.log(error);
+    }
+    const shockNoti = await getShockNotificationById(token,2);
     console.log("Shock notification: ", shockNoti);
     setNotificationList((prevData) => {
       const updatedData = [...prevData];
@@ -279,12 +290,17 @@ const NotificationAdminPage = () => {
             }
             confirmContent={"Thêm"}
             onConfirm={async () => {
-              
+              let token = "";
+              try {
+                token = await getAccessToken();
+              } catch (error) {
+                console.log(error);
+              }
               const res = await createNotification(
                 {
                   title: title,
                   message: message,
-                },
+                },token
               );
               console.log(res);
               if (res.status == 201) {

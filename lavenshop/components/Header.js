@@ -68,8 +68,8 @@ const Header = () => {
       <Link href="/" className={`${nunito.className} w-fit`}>
         <div className="flex-col items-center text-primary justify-center">
           <div className="flex">
-            <div className="text-4xl font-extrabold">Har</div>
-            <div className="text-4xl font-bold text-yellow-500">be</div>
+            <div className="text-4xl font-extrabold">La</div>
+            <div className="text-4xl font-bold text-yellow-500">ven</div>
           </div>
           <div className="font-bold text-center text-sm">Tốt & Nhanh</div>
         </div>

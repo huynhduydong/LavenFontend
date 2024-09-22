@@ -15,6 +15,7 @@ const CategoryAdminCard = ({
           <img
             src={category.thumbnailUrl}
             className="w-[148px] h-[148px] rounded-[8px]"
+            alt="category"
                       />
         </div>
       </div>

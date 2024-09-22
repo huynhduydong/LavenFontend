@@ -16,13 +16,13 @@ const getAllNotifications = async (pageNo, pageSize) => {
   }
 };
 
-const createNotification = async (notifications) => {
+const createNotification = async (notifications,token) => {
   let data = notifications;
-
+  
   let config = {
     maxBodyLength: Infinity,
     headers: {
-        "X-Auth-User-Id": "1",  
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -40,13 +40,13 @@ const createNotification = async (notifications) => {
   }
 };
 
-const updateNotificationById = async (notifications, id) => {
+const updateNotificationById = async (notifications, token, id) => {
   let data = notifications;
 
   let config = {
     maxBodyLength: Infinity,
     headers: {
-        "X-Auth-User-Id": "1",  
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -64,11 +64,11 @@ const updateNotificationById = async (notifications, id) => {
   }
 };
 
-const deleteNotificationById = async (id) => {
+const deleteNotificationById = async (token,id) => {
   let config = {
     maxBodyLength: Infinity,
     headers: {
-        "X-Auth-User-Id": "1",  
+      Authorization: `Bearer ${token}`,
     },
   };
 
@@ -85,11 +85,11 @@ const deleteNotificationById = async (id) => {
   }
 };
 
-const getShockNotificationById = async (id) => {
+const getShockNotificationById = async (token,id) => {
   let config = {
     maxBodyLength: Infinity,
     headers: {
-      "X-Auth-User-Id": "1",  
+      Authorization: `Bearer ${token}`,
     },
   };
 

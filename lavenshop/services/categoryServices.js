@@ -25,13 +25,18 @@ const getCategoryById = async (id) => {
   }
 };
 
-const createCategory = async (category) => {
+const createCategory = async (category,token) => {
   let data = category;
-
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.post(
       "http://localhost:8080/api/v1/categories",
-      data    );
+      data,config    );
     if (res && res.data) {
       return res;
     }
@@ -40,13 +45,18 @@ const createCategory = async (category) => {
   }
 };
 
-const updateCategoryById = async (category, id) => {
+const updateCategoryById = async (category, id,token) => {
   let data = category;
-
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.put(
       `http://localhost:8080/api/v1/categories/${id}`,
-      data,
+      data,config
     );
     if (res && res.data) {
       return res;
@@ -56,10 +66,16 @@ const updateCategoryById = async (category, id) => {
   }
 };
 
-const deleteCategoryById = async ( id) => {
+const deleteCategoryById = async ( id,token) => {
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.delete(
-      `http://localhost:8080/api/v1/categories/${id}`
+      `http://localhost:8080/api/v1/categories/${id}`,config
     );
     if (res && res.data) {
       return res;

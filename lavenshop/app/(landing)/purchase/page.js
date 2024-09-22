@@ -136,32 +136,6 @@ export default function PurchasePage() {
                   <th className="px-6 py-3">Thành tiền</th>
                 </tr>
               </thead>
-              {/* <tbody>
-                {PRODUCT_ARRAY &&
-                  PRODUCT_ARRAY.length > 0 &&
-                  PRODUCT_ARRAY.map((product, index) => {
-                    return (
-                      <tr key={`product-${index}`}>
-                        <td className="flex items-center gap-2 px-6 py-4">
-                          <img className="size-10" src={product.img} />
-                          <span className="line-clamp-1">{product.name}</span>
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {product.color}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {convertPrice(product.price)}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {product.quantity}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          {convertPrice(product.total)}
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody> */}
               <tbody className="bg-detail">
                 {cartItems &&
                   cartItems?.length > 0 &&

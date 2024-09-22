@@ -27,6 +27,7 @@ import { CustomViewDialog } from "@/components/custom/Admin/CustomViewDialog";
 import { CategoryInfoForm } from "@/components/custom/Admin/CategoryInfoForm";
 import ProductRow from "@/components/custom/Admin/ProductRow";
 import CustomTable from "@/components/custom/Admin/Table/CustomTable";
+import { getAccessToken, getSession } from "@/services/authServices";
 
 const CategoryAdminPage = () => {
   const productField = [
@@ -187,9 +188,14 @@ const CategoryAdminPage = () => {
             onConfirm={async () => {
               console.log("Confirm delete category");
               let token = "";
+              try {
+                token = await getAccessToken();
+              } catch (error) {
+                console.log(error);
+              }
              
               const res = await deleteCategoryById(
-                categoryList[selectedCategory].id
+                categoryList[selectedCategory].id,token
               );
               console.log(res);
               if (res.status == 200) {
@@ -221,13 +227,18 @@ const CategoryAdminPage = () => {
               const imgURL = selectedFiles[0]
                 ? await uploadCategoryImage(selectedFiles[0])
                 : categoryList[selectedCategory].thumbnailUrl;
-              
+                let token = "";
+              try {
+                token = await getAccessToken();
+              } catch (error) {
+                console.log(error);
+              }
               const res = await updateCategoryById(
                 {
                   name: categoryName,
                   thumbnailUrl: imgURL,
                 },
-                categoryList[selectedCategory].id
+                categoryList[selectedCategory].id,token
               );
               console.log(res);
               if (res.status == 200) {
@@ -295,12 +306,17 @@ const CategoryAdminPage = () => {
               const imgURL = selectedFiles[0]
                 ? await uploadCategoryImage(selectedFiles[0])
                 : "";
-             
+                let token = "";
+                try {
+                  token = await getAccessToken();
+                } catch (error) {
+                  console.log(error);
+                }
               const res = await createCategory(
                 {
                   name: categoryName,
                   thumbnailUrl: imgURL,
-                },
+                },token
               );
               console.log(res);
               if (res.status == 201) {

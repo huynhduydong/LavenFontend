@@ -2,6 +2,7 @@ import ImagePicker from "@/components/custom/Admin/ImagePicker";
 import iconPlusBlue from "@/public/ic_admin/ic_plus_blue.svg";
 import { NameValueForm } from "./NameValueForm";
 import Image from "next/image";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export const ProductInfoForm = ({
   selectedFiles,
@@ -29,6 +30,9 @@ export const ProductInfoForm = ({
   onOptionAdd,
   onOptionRemove,
   productThumbnailUrl,
+  categoryList,
+  selectedCategory,
+  onCategoryChange,
 }) => {
   return (
     <>
@@ -86,6 +90,28 @@ export const ProductInfoForm = ({
                 <div className="text-sm font-semibold text-black flex flex-col justify-start items-start">
                   Hãng
                 </div>
+                <Select 
+                  value={selectedCategory} 
+                  onValueChange={onCategoryChange}
+                  >
+                  <SelectTrigger className="w-full mt-[4px]">
+                    <SelectValue placeholder="Chọn danh mục" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categoryList.map((category) => (
+                      <SelectItem key={category.id} value={category.urlKey}>
+                        <div className="flex items-center">
+                          <img 
+                            src={category.thumbnailUrl} 
+                            alt={category.name} 
+                            className="w-6 h-6 mr-2 object-contain"
+                          />
+                          {category.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <div className="w-full relative flex items-center justify-center flex-row">
                   <input
                     value={productBrand || ""}

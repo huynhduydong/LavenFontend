@@ -34,12 +34,19 @@ const getProductById = async (productId) => {
 
 
 
-const createProduct = async (product) => {
+const createProduct = async (product,token) => {
   let data = product;
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.post(
       "http://localhost:8080/api/v1/products",
-      data
+      data,
+      config
     );
     if (res && res.data) {
       return res;
@@ -49,15 +56,21 @@ const createProduct = async (product) => {
   }
 };
 
-const updateProductById = async (product, id) => {
+const updateProductById = async (product, token,id) => {
   let data = product;
 
-  
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   try {
     const res = await axios.put(
       `http://localhost:8080/api/v1/products/${id}`,
-      data
+      data,
+      config
     );
     if (res && res.data) {
       return res;
@@ -66,11 +79,16 @@ const updateProductById = async (product, id) => {
     return error.response;
   }
 };
-const deleteProductById = async (id) => {
-  
+const deleteProductById = async (id,token) => {
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   try {
     const res = await axios.delete(
-      `http://localhost:8080/api/v1/products/${id}`
+      `http://localhost:8080/api/v1/products/${id}`,config
     );
     if (res && res.data) {
       return res;
