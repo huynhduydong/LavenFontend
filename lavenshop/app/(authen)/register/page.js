@@ -9,10 +9,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import iconEye from "@/public/ic_eye.svg";
 import iconHidden from "@/public/ic_hidden.svg";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
@@ -24,16 +27,21 @@ const RegisterPage = () => {
     if (repassword != password) {
       toast.error("Mật khẩu không trùng khớp");
     } else {
-      const res = await register(username, name, email, password);
+      const res = await register(username, name, email, phone, password);
       console.log(res);
-      if (res == "User register successfully!")
+      if (res == "User register successfully!") {
         toast.success("Đăng ký tài khoản thành công");
-      else {
+        // wait for 2 seconds
+        setTimeout(() => {
+          router.replace("/login");
+        }, 2000);
+      } else {
         if (res.email) toast.error(res.email);
         if (res.name) toast.error(res.name);
         if (res.username) toast.error(res.username);
         if (res.password) toast.error(res.password);
         if (res.message) toast.error(res.message);
+        if (res.phone) toast.error(res.phone);
       }
     }
   };
@@ -54,19 +62,28 @@ const RegisterPage = () => {
           <div className="text-xl">Đăng ký</div>
 
           <form onSubmit={handleRegisterButtonClick}>
-            <input
-              placeholder="Họ và tên (*)"
-              className="w-full text-[14px] focus:outline-none focus:border-primary focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[24px]"
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-            ></input>
+            <div className="flex flex-row items-center mt-[24px] gap-[12px]">
+              <input
+                placeholder="Họ và tên (*)"
+                className="w-full text-[14px] focus:outline-none focus:border-primary focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              ></input>
+              <input
+                placeholder="Email (*)"
+                className="w-full text-[14px] focus:outline-none focus:border-primary focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              ></input>
+            </div>
 
             <input
-              placeholder="Email (*)"
+              placeholder="Số điện thoại (*)"
               className="w-full text-[14px] focus:outline-none focus:border-primary focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[20px]"
               onChange={(e) => {
-                setEmail(e.target.value);
+                setPhone(e.target.value);
               }}
             ></input>
 

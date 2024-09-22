@@ -2,66 +2,90 @@
 
 import { useState, useEffect } from "react";
 import { getCart, updateCart, deleteCart } from "@/services/cartServices";
+import { getAccessToken } from "@/services/authServices";
 import { convertPrice } from "@/utils/convertPrice";
 import { useRouter } from "next/navigation";
+
 export default function CartPage() {
+  const [accessToken, setAccessToken] = useState();
   const [cartItems, setCartItems] = useState([]);
+
   const router = useRouter();
+
   const fetchCartItems = async () => {
-      setCartItems(await getCart());
+    setCartItems(await getCart(accessToken));
   };
 
   const updateCartItem = async (productId, productItemId, delta) => {
     if (productItemId === null) {
-      await updateCart(productId, null, delta);
+      const response = await updateCart(productId, null, delta, accessToken);
+
+      fetchCartItems();
     } else {
       for (let i = 0; i < productItemId.length; i++) {
         productItemId[i] = productItemId[i].id;
       }
-      await updateCart(null, productItemId, delta);
+      const response = await updateCart(
+        null,
+        productItemId,
+        delta,
+        accessToken
+      );
+
+      fetchCartItems();
     }
   };
 
   const deleteCartItem = async (productId, productItemId) => {
     if (productItemId === null) {
-      await deleteCart(productId, null);
+      const response = await deleteCart(productId, null, accessToken);
+      // console.log(">>> response: ", response.data);
+
+      fetchCartItems();
     } else {
       for (let i = 0; i < productItemId.length; i++) {
         productItemId[i] = productItemId[i].id;
       }
-      await deleteCart(null, productItemId);
+      const response = await deleteCart(null, productItemId, accessToken);
+      // console.log(">>> response: ", response.data);
+
+      fetchCartItems();
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setAccessToken(await getAccessToken());
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessToken();
+      // console.log("Token retrieved: ", token);
+      setAccessToken(token);
+    })();
+  }, []);
+  
 
   useEffect(() => {
-    fetchCartItems();
-  }, []);
+    // console.log("Access token: ", accessToken);
+    if (accessToken) {
+      fetchCartItems();
+    }
+  }, [accessToken]);
+  
 
   const lessOfThisProduct = async (itemId, itemOption, itemQuantity) => {
     console.log({ itemId, itemOption, itemQuantity });
 
     if (itemQuantity > 1) {
       updateCartItem(itemId, itemOption, -1);
-      fetchCartItems();
     } else {
       if (
         window.confirm("Bạn có chắc muốn xóa sản phẩm này ra khỏi giỏ hàng?")
       ) {
         deleteCartItem(itemId, itemOption);
-        fetchCartItems();
       }
     }
   };
 
   const moreOfThisProduct = (itemId, itemOption) => {
     updateCartItem(itemId, itemOption, 1);
-    fetchCartItems();
   };
 
   const calculateTotalPrice = () => {
@@ -73,13 +97,14 @@ export default function CartPage() {
         cartItems[i].quantity;
     }
     return total / 100;
-    };
+  };
 
   console.log(cartItems);
 
   return (
-    <div className="bg-gray-100 w-full px-32 py-10 h-full ">
+    <div className="bg-gray-100 w-full px-32 py-10 h-full min-h-[calc(100vh-76px-360.8px)]">
       <div className="text-lg font-medium pb-8">GIỎ HÀNG</div>
+      {/* Giỏ hàng trống */}
       {cartItems && cartItems.length == 0 && (
         <div className="flex flex-col bg-white p-6 gap-2 items-center rounded-md">
           <img
@@ -89,10 +114,12 @@ export default function CartPage() {
           />
           <div className="font-medium">Giỏ hàng đang trống!</div>
           <div>
-            Bạn tham khảo thêm các sản phẩm được Laven gợi ý bên dưới nhé!
+            Bạn tham khảo thêm các sản phẩm được Harbe gợi ý bên dưới nhé!
           </div>
         </div>
       )}
+
+      {/* Có sản phẩm trong giỏ hàng */}
       {cartItems && cartItems.length > 0 && (
         <table className="table-auto w-full mb-4">
           <thead className="bg-white mb-4">
@@ -101,7 +128,6 @@ export default function CartPage() {
                 scope="col"
                 className="flex items-center gap-6 py-5 px-12 text-sm text-left font-semibold"
               >
-                <input type="checkBox" />
                 <span>Sản phẩm</span>
               </th>
               <th scope="col" className="px-2 py-4 text-sm font-semibold">
@@ -126,7 +152,6 @@ export default function CartPage() {
               cartItems.map((item, index) => (
                 <tr key={`cart-item-${index}`} className="bg-white mb-4">
                   <td className="flex items-center gap-6 px-12 py-4">
-                    <input type="checkBox" />
                     <img
                       src={item.thumbnailUrl}
                       alt="Product"
@@ -145,7 +170,7 @@ export default function CartPage() {
                         </div>
                       ))}
                   </td>
-                  <td className="px-2 py-4 text-sm whitespace-nowrap flex items-center justify-center gap-2">
+                  <td className="px-2 py-4 text-sm whitespace-nowrap items-center justify-center gap-2">
                     {item.discountRate > 0 && (
                       <div className="flex gap-3">
                         <span className="text-gray-300 line-through">
@@ -208,7 +233,6 @@ export default function CartPage() {
                           )
                         ) {
                           deleteCartItem(item.id, item.option);
-                          fetchCartItems();
                         }
                       }}
                     >
@@ -237,7 +261,7 @@ export default function CartPage() {
               <td className="px-2 py-4 text-sm whitespace-nowrap text-center"></td>
               <td className="px-2 py-4 text-sm whitespace-nowrap text-center"></td>
               <td className="px-2 py-4 text-sm whitespace-nowrap text-center flex items-center gap-1">
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -251,13 +275,13 @@ export default function CartPage() {
                     d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z"
                   />
                 </svg>
-                Mã giảm giá
+                Mã giảm giá */}
               </td>
               <td
                 className="px-2 py-4 text-sm whitespace-nowrap text-center"
                 colSpan={2}
               >
-                <p className="text-primary text-end pr-16">Chọn hoặc nhập mã</p>
+                {/* <p className="text-primary text-end pr-16">Chọn hoặc nhập mã</p> */}
               </td>
             </tr>
             <tr className="font-medium">
@@ -265,9 +289,9 @@ export default function CartPage() {
                 className="px-2 py-8 text-sm whitespace-nowrap flex items-center gap-2 pl-12"
                 colSpan={1}
               >
-                <input type="checkBox" />
+                {/* <input type="checkBox" />
                 <span>Chọn tất cả ({cartItems.length})</span>
-                <span>Xóa</span>
+                <span>Xóa</span> */}
               </td>
               <td
                 className="px-2 py-4 text-sm whitespace-nowrap text-end pr-16"

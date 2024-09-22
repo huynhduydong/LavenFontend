@@ -1,23 +1,31 @@
 "use client";
 
+import { getAccessToken } from "@/services/authServices";
 import { deleteAllCart } from "@/services/cartServices";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function PaymentSuccess() {
+  const [accessToken, setAccessToken] = useState();
   const [newestOrderId, setNewestOrderId] = useState();
 
-
+  useEffect(() => {
+    (async () => {
+      setAccessToken(await getAccessToken());
+    })();
+  }, []);
 
   useEffect(() => {
-    getAllOrders();
-  }, []);
+    if (accessToken) {
+      getAllOrders();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (!newestOrderId) return;
 
     captureOrder(newestOrderId);
-    deleteAllCart();
+    deleteAllCart(accessToken);
   }, [newestOrderId]);
 
   const getAllOrders = async () => {
@@ -28,7 +36,7 @@ export default function PaymentSuccess() {
       maxBodyLength: Infinity,
       url: "http://localhost:8080/api/v1/order",
       headers: {
-        "X-Auth-User-Id": "1",  
+        Authorization: `Bearer ${accessToken}`,
       },
       data: data,
     };
@@ -52,7 +60,7 @@ export default function PaymentSuccess() {
       maxBodyLength: Infinity,
       url: `http://localhost:8080/api/v1/order/paypal_capture/${newestOrderId}`,
       headers: {
-        "X-Auth-User-Id": "1",  
+        Authorization: `Bearer ${accessToken}`,
       },
       data: data,
     };

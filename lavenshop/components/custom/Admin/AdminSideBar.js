@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { logout } from "@/services/authServices";
+import { nunito } from "@/components/ui/fonts";
 
 const AdminSideBar = ({ menu, others }) => {
   const pathname = usePathname();
@@ -26,8 +27,14 @@ const AdminSideBar = ({ menu, others }) => {
 
   return (
     <div className="bg-black px-[32px] py-[16px] flex flex-col items-center">
-      <Link href="/">
-        <Image alt="Laven Logo" priority={true} src={logo} width={160} />
+     <Link href="/" className={`${nunito.className} w-fit`}>
+        <div className="flex-col items-center text-primary justify-center">
+          <div className="flex">
+            <div className="text-4xl font-extrabold">Har</div>
+            <div className="text-4xl font-bold text-yellow-500">be</div>
+          </div>
+          <div className="font-bold text-center text-sm">Tốt & Nhanh</div>
+        </div>
       </Link>
       <div className="flex flex-col justify-center h-fit mt-[64px]">
         <div className="text-gray-400 font-semibold text-[14px]">MENU</div>

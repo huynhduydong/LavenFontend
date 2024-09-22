@@ -1,61 +1,41 @@
 "use client";
 
 import Link from "next/link";
-import { nunito } from "./../../../components/ui/fonts";
 import Image from "next/image";
 import logo2 from "../../../public/ic_logo_2.svg";
-import facebookLogo from "../../../public/ic_facebook_logo.svg";
-import googleLogo from "../../../public/ic_goole_logo.svg";
+
 import { useState } from "react";
-import axios from "axios";
-import qs from "qs";
+import { getSession, login, logout } from "@/services/authServices";
+import { useRouter } from "next/navigation";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import iconEye from "@/public/ic_eye.svg";
+import iconHidden from "@/public/ic_hidden.svg";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [visibleIcon, setVisibleIcon] = useState(iconEye);
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-
-    // console.log({ username, password });
-
-    let data = qs.stringify({
-      'grant_type': 'password',
-      'username': 'admin',
-      'password': 'admin',
-      'scope': 'client-internal',
-    });
-
-    let config = {
-      method: "post",
-      maxBodyLength: Infinity,
-      url: "http://localhost:8080/api/oauth2/v1/token",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic Y2xpZW50OnNlY3JldA==",
-      },
-      data: data,
-    };
-
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const isLogin = await login(username, password);
+    if (isLogin) toast.success("Đăng nhập thành công!");
+    else toast.error("Sai tài khoản hoặc mật khẩu!");
   };
 
   return (
     <>
-      <div className="bg-blue-100 flex flex-row items-center justify-evenly py-[100px]">
+      <div className="bg-blue-100 flex flex-row items-center justify-evenly w-full">
         {/* Logo */}
         <Image
           src={logo2}
           alt="Laven Logo"
           priority={true}
-          className="h-auto w-[400px]"
+          className="h-auto w-[600px]"
         />
 
         {/* Form */}
@@ -67,63 +47,85 @@ export default function LoginPage() {
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Email/Số điện thoại/Tên đăng nhập"
-              className="w-full text-sm focus:outline-none focus:border-blue-600 focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[32px]"
-              required
+              placeholder="Email/Số điện thoại/Tên đăng nhập (*)"
+              className="w-full text-sm focus:outline-none focus:border-primary py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[24px]"
             />
 
-            <input
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Mật khẩu"
-              className="w-full text-sm focus:outline-none focus:border-blue-600 focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300 mt-[20px]"
-              type="password"
-              required
-            />
+            <div className="relative flex flex-row items-center mt-[20px]">
+              <input
+                id="pass"
+                placeholder="Mật khẩu (*)"
+                type={visibleIcon == iconEye ? "password" : "text"}
+                className="w-full text-[14px] focus:outline-none focus:border-primary focus:border-2 py-[10px] px-[20px] rounded border-2 border-gray-300"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              ></input>
+              <Image
+                alt="Show/Hidden pass button"
+                className="hover:cursor-pointer absolute right-[16px]"
+                src={visibleIcon}
+                width={20}
+                onClick={() => {
+                  if (visibleIcon == iconEye) setVisibleIcon(iconHidden);
+                  else setVisibleIcon(iconEye);
+                }}
+              />
+            </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white mt-[32px] rounded py-[12px] hover:bg-blue-400"
+              className="w-full bg-primary text-white mt-[32px] rounded py-[12px] hover:bg-blue-400"
             >
               ĐĂNG NHẬP
             </button>
           </form>
 
-          <Link href={"/"} className="hover:text-gray-600">
-            <div className="text-[14px] text-blue-600 mt-[8px] hover:decoration-solid hover:underline">
+          {/* <Link href={"/"} className="hover:text-gray-600">
+            <div className="text-[14px] text-primary mt-[8px] hover:decoration-solid hover:underline">
               Quên mật khẩu
             </div>
-          </Link>
+          </Link> */}
 
-          <div className="mt-[32px] flex flex-row justify-center items-center">
+          {/* <div className="mt-[32px] flex flex-row justify-center items-center">
             <div className="w-[64px] border-[1px] h-[0px] border-gray-300"></div>
             <div className="text-[14px] text-gray-500 mx-[32px]">HOẶC</div>
             <div className="w-[64px] border-[1px] h-[0px] border-gray-300"></div>
           </div>
 
           <div className="flex flex-row justify-center items-center mt-[32px]">
-            <button className="w-2/5 border-[1px] border-gray-400 rounded flex flex-row justify-center items-center py-[10px] hover:border-blue-600 hover:shadow-lg">
-              <Image src={facebookLogo} width={20} height={20}></Image>
+            <button className="w-2/5 border-[1px] border-gray-400 rounded flex flex-row justify-center items-center py-[10px] hover:border-primary hover:shadow-lg">
+              <Image
+                src={facebookLogo}
+                width={20}
+                height={20}
+                alt="Login by Facebook"
+              ></Image>
               <div className="text-[14px] ml-[8px]">Facebook</div>
             </button>
 
-            <button className="w-2/5 border-[1px] border-gray-400 rounded flex flex-row justify-center items-center py-[10px] hover:border-blue-600 hover:shadow-lg ml-[20px]">
-              <Image src={googleLogo} width={20} height={20}></Image>
+            <button className="w-2/5 border-[1px] border-gray-400 rounded flex flex-row justify-center items-center py-[10px] hover:border-primary hover:shadow-lg ml-[20px]">
+              <Image
+                src={googleLogo}
+                width={20}
+                height={20}
+                alt="Login by Google"
+              ></Image>
               <div className="text-[14px] ml-[8px]">Google</div>
             </button>
-          </div>
+          </div> */}
 
           <div className="flex flex-row justify-center items-center mt-[32px] text-[14px] text-gray-500">
-            <div>Bạn mới biết đến Laven?</div>
+            <div>Bạn mới biết đến Harbe?</div>
             <Link href={"/register"}>
-              <div className="ml-[6px] text-blue-600 hover:decoration-solid hover:underline">
+              <div className="ml-[6px] text-primary hover:decoration-solid hover:underline">
                 Đăng ký
               </div>
             </Link>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

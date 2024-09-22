@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import { convertPrice } from "@/utils/convertPrice";
 import { Button } from "@/components/ui/button";
 import { addToCart, getCart } from "@/services/cartServices";
+import { getAccessToken } from "@/services/authServices";
 import { ShoppingCart } from "@/components/icons/shopping-cart";
 import { Toaster } from "@/components/ui/toaster";
 import { toast, useToast } from "@/components/ui/use-toast";
+
 export const ProductInformation = ({ product }) => {
+  const [accessToken, setAccessToken] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [productItemId, setProductItemId] = useState(null);
   const [productId, setProductId] = useState(null);
@@ -13,11 +16,11 @@ export const ProductInformation = ({ product }) => {
   const [optionsValue, setOptionsValue] = useState([]);
 
   const handleAddToCart = async () => {
-    const productsInCart = await getCart();
+    const productsInCart = await getCart(accessToken);
     let finalQuantity = quantity;
 
     if (productsInCart.length === 0) {
-      await addToCart(productItemId, productId, finalQuantity);
+      await addToCart(productItemId, productId, finalQuantity, accessToken);
       return;
     }
 
@@ -35,12 +38,13 @@ export const ProductInformation = ({ product }) => {
       }
     }
 
-    // console.log({ productItemId, productId, finalQuantity });
+    // console.log({ productItemId, productId, finalQuantity, accessToken });
 
     const response = await addToCart(
       productItemId,
       productId,
-      finalQuantity
+      finalQuantity,
+      accessToken
     );
 
     console.log(response);
@@ -55,7 +59,8 @@ export const ProductInformation = ({ product }) => {
         title: "Giỏ hàng",
         description: "Thêm đơn hàng thất bại!",
       });
-    }  };
+    }
+  };
 
   const incQuantity = () => {
     setQuantity(quantity + 1);
@@ -69,11 +74,11 @@ export const ProductInformation = ({ product }) => {
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     setAccessToken(await getAccessToken());
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      setAccessToken(await getAccessToken());
+    })();
+  }, []);
 
   useEffect(() => {
     if (product && product.options && product.options.length > 0) {
@@ -111,18 +116,18 @@ export const ProductInformation = ({ product }) => {
       setProductId(product.id);
     }
   }, [product]);
-  const starsCount = Math.round(product.ratingAverage);
 
   // console.log(productItemId.toString());
   // console.log(accessToken);
-  console.log(product);
+
+  const starsCount = Math.round(product.ratingAverage);
 
   return (
     <>
       {product && (
         <div className="w-100 pt-5 pl-5 pr-9">
           {/* Product Name */}
-          <div className="text-xl font-medium leading-6 flex">
+          <div className="text-2xl font-medium leading-6 flex">
             <span>{product.name}</span>
           </div>
           {/* Product Rating */}
@@ -161,13 +166,13 @@ export const ProductInformation = ({ product }) => {
                     )}
                   </div>
                 )}
-                <div className="text-2xl text-red-500">
+                <div className="text-2xl text-black">
                   ₫{convertPrice(product.price)}
                 </div>
                 {product.discountRate > 0 && (
                   <>
                     {" "}
-                    <div className="uppercase text-sm text-white bg-red-500 p-1 rounded-sm">
+                    <div className="uppercase text-sm text-white bg-blue-500 p-1 rounded-sm">
                       {product.discountRate}% Giảm
                     </div>
                   </>
@@ -192,7 +197,7 @@ export const ProductInformation = ({ product }) => {
                           variant="outline"
                           className={
                             optionValue.id === productItemId[index]
-                              ? "border-primary text-primary"
+                              ? "border-primary text-primary hover:bg-blue-50 hover:text-blue-500"
                               : ""
                           }
                           onClick={() => {
@@ -210,8 +215,8 @@ export const ProductInformation = ({ product }) => {
               ))}
           </div>
           {/* Quantity */}
-          <div className="flex items-center gap-4 text-sm mt-6 h-8">
-            <div className="w-28 mt-2 text-gray-500">Số lượng </div>
+          <div className="flex items-center gap-3 text-sm mt-6 h-8">
+            <div className="w-24 mt-2 text-gray-500">Số lượng </div>
             <div className="flex items-center">
               <button
                 style={{ border: "1px solid rgba(0, 0, 0, .09)" }}
@@ -234,9 +239,9 @@ export const ProductInformation = ({ product }) => {
               >
                 +
               </button>
-              <label className="text-gray-500 items-center inline-flex ms-4 mt-2">
+              {/* <label className="text-gray-500 items-center inline-flex ms-4 mt-2">
                 9999 sản phẩm có sẵn
-              </label>
+              </label> */}
             </div>
           </div>
           {/* Add To Cart */}

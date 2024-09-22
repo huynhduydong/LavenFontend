@@ -3,7 +3,6 @@
 import { MapPin } from "@/components/icons/map-pin";
 import { Ticket } from "@/components/icons/ticket";
 import { convertPrice } from "@/utils/convertPrice";
-
 import {
   Select,
   SelectContent,
@@ -15,21 +14,34 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { deleteAllCart, getCart } from "@/services/cartServices";
 import axios from "axios";
+import { getAccessToken, getSession } from "@/services/authServices";
 
 export default function PurchasePage() {
   const [cartItems, setCartItems] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [accessToken, setAccessToken] = useState();
 
   const router = useRouter();
 
   const fetchCartItems = async () => {
-    setCartItems(await getCart());
+    if (accessToken) {
+      const cartData = await getCart(accessToken);
+      setCartItems(cartData);
+    }
   };
 
+  useEffect(() => {
+    (async () => {
+      const token = await getAccessToken();
+      setAccessToken(token);
+    })();
+  }, []);
 
   useEffect(() => {
-    fetchCartItems();
-  }, []);
+    if (accessToken) {
+      fetchCartItems();
+    }
+  }, [accessToken]);
 
   const createOrder = async (addressId, paymentMethod) => {
     let data = JSON.stringify({
@@ -45,7 +57,7 @@ export default function PurchasePage() {
       url: "http://localhost:8080/api/v1/order",
       headers: {
         "Content-Type": "application/json",
-        "X-Auth-User-Id": "1",  
+        Authorization: `Bearer ${accessToken}`,
       },
       data: data,
     };
@@ -284,9 +296,9 @@ export default function PurchasePage() {
                       .then((response) => {
                         if (paymentMethod === "COD") {
                           router.push(`/payment/success`);
-                          deleteAllCart();
+                          deleteAllCart(accessToken);
                         } else if (paymentMethod === "PAYPAL") {
-                          // console.log(response.data.paypalLink);
+                          console.log(response.data.paypalLink);
                           router.push(response.data.paypalLink);
                         }
                       })
