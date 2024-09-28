@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import logo from "@/public/ic_logo_2.svg";
 import icExit from "@/public/ic_admin/ic_exit.svg";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -30,8 +29,8 @@ const AdminSideBar = ({ menu, others }) => {
      <Link href="/" className={`${nunito.className} w-fit`}>
         <div className="flex-col items-center text-primary justify-center">
           <div className="flex">
-            <div className="text-4xl font-extrabold">Har</div>
-            <div className="text-4xl font-bold text-yellow-500">be</div>
+            <div className="text-4xl font-extrabold">La</div>
+            <div className="text-4xl font-bold text-yellow-500">ven</div>
           </div>
           <div className="font-bold text-center text-sm">Tốt & Nhanh</div>
         </div>
@@ -72,63 +71,6 @@ const AdminSideBar = ({ menu, others }) => {
             <div className="text-red-500 text-[17px] mr-[40px]">Đăng xuất</div>
           </div>
         </button>
-
-        {/* <div className="text-gray-400 font-semibold text-[14px] mt-[40px]">
-          OTHERS
-        </div>
-        {others.map((item, index) =>
-          item.link != "/admin/exit" ? (
-            <Link
-              key={index}
-              href={item.link}
-              onClick={() => {
-                setSelectedTab(item.name);
-              }}
-            >
-              <div
-                className="flex row items-center mt-[12px] py-[8px] pl-[12px] rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out w-[160px]"
-                style={{
-                  backgroundColor:
-                    selectedTab === item.name ? "#0077B6" : "transparent",
-                }}
-              >
-                <Image
-                  alt={`${item.name} icon`}
-                  src={item.icon}
-                  className="w-[20px] h-[20px] mr-[12px]"
-                />
-                <div className="text-gray-200 text-[17px] mr-[40px]">
-                  {item.name}
-                </div>
-              </div>
-            </Link>
-          ) : ( */}
-        {/* <button
-              key={index}
-              onClick={() => {
-                setSelectedTab(item.name);
-                logout();
-              }}
-            >
-              <div
-                className="flex row items-center mt-[12px] py-[8px] pl-[12px] rounded-[8px] cursor-pointer transition-all duration-300 ease-in-out w-[160px]"
-                style={{
-                  backgroundColor:
-                    selectedTab === item.name ? "#0077B6" : "transparent",
-                }}
-              >
-                <Image
-                  alt={`${item.name} icon`}
-                  src={item.icon}
-                  className="w-[20px] h-[20px] mr-[12px]"
-                />
-                <div className="text-gray-200 text-[17px] mr-[40px]">
-                  {item.name}
-                </div>
-              </div>
-            </button>
-          )
-        )} */}
       </div>
     </div>
   );

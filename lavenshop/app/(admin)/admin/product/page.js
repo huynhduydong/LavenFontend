@@ -108,15 +108,11 @@ const ProductAdminPage = () => {
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);
   };
-  // const getAllProductQuantity = async () => {
-  //   const data = await getListProduct();
-  //   console.log(data);
-  //   setTotalProductQuantity(data.content.length);
-  // };
-
-  // useEffect(() => {
-  //   getAllProductQuantity();
-  // }, []);
+  const showError = (errorArr) => {
+    errorArr.forEach((error) => {
+      toast.error(error[1]);
+    });
+  };
 
   useEffect(() => {
     if (searchValue && searchValue.length > 0) {
@@ -404,9 +400,31 @@ const ProductAdminPage = () => {
            confirmDialogContent={
              "Sản phẩm sẽ được thêm vào danh sách sản phẩm."
            }
-            confirmContent={"Thêm"}
-            onConfirm={async () => {
-              console.log("Confirm create product");
+           confirmContent={"Thêm"}
+           onConfirm={async () => {
+             console.log("Confirm create product");
+            //  if (
+            //    checkDuplicateNameKey(productOptionList) ||
+            //    checkDuplicateNameKey(productSpecList)
+            //  ) {
+            //    console.log(productOptionList);
+            //    console.log(productSpecList);
+            //    const errorArray = [];
+            //    if (checkDuplicateNameKey(productOptionList)) {
+            //      errorArray.push([
+            //        "Option List",
+            //        "Phân loại hàng trùng nhau!",
+            //      ]);
+            //    }
+            //    if (checkDuplicateNameKey(productSpecList)) {
+            //      errorArray.push([
+            //        "Specification List",
+            //        "Thông tin chi tiết trùng nhau!",
+            //      ]);
+            //    }
+            //    showError(errorArray);
+            //    return;
+            //  }
               const imgURL = selectedFiles[0]
                 ? await uploadFile(selectedFiles[0])
                 : "";
