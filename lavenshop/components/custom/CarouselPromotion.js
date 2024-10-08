@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -9,7 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import firstPromo from "@/public/pictures/promotion/firstPromo.jpeg";
+import firstPromo from "@/public/pictures/promotion/firstPromo.jpg";
 import secondPromo from "@/public/pictures/promotion/secondPromo.jpeg";
 import thirdPromo from "@/public/pictures/promotion/thirdPromo.jpeg";
 import fourthPromo from "@/public/pictures/promotion/fourthPromo.jpeg";

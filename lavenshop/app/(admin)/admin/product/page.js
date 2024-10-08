@@ -204,28 +204,6 @@ const ProductAdminPage = () => {
             confirmContent={"Cập nhật"}
             onConfirm={async () => {
               console.log("Confirm update product");
-              // if (
-              //   checkDuplicateNameKey(productOptionList) ||
-              //   checkDuplicateNameKey(productSpecList)
-              // ) {
-              //   console.log(productOptionList);
-              //   console.log(productSpecList);
-              //   const errorArray = [];
-              //   if (checkDuplicateNameKey(productOptionList)) {
-              //     errorArray.push([
-              //       "Option List",
-              //       "Phân loại hàng trùng nhau!",
-              //     ]);
-              //   }
-              //   if (checkDuplicateNameKey(productSpecList)) {
-              //     errorArray.push([
-              //       "Specification List",
-              //       "Thông tin chi tiết trùng nhau!",
-              //     ]);
-              //   }
-              //   showError(errorArray);
-              //   return;
-              // }
               const imgURL = selectedFiles[0]
                 ? await uploadProductImage(selectedFiles[0])
                 : productList[selectedProduct].thumbnailUrl;

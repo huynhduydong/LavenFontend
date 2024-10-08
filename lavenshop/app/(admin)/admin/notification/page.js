@@ -223,12 +223,18 @@ const NotificationAdminPage = () => {
             }
             confirmContent={"Cập nhật"}
             onConfirm={async () => {
-              
+              let token = "";
+              try {
+                token = await getAccessToken();
+                console.log(token);
+              } catch (error) {
+                console.log(error);
+              }
               const res = await updateNotificationById(
                 {
                   title: title,
                   message: message,
-                },
+                },token,
                 notificationList[selectedNotification].id
               );
               console.log(res);

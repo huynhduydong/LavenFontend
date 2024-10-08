@@ -101,6 +101,70 @@ const createUser = async (user, token) => {
   }
 };
 
+
+
+const deleteUserById = async (token, id) => {
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.delete(
+      `http://localhost:8080/api/v1/users/${id}`,
+      config
+    );
+    if (res && res.data) {
+      return res;
+    }
+  } catch (error) {
+    return error.response;
+  }
+};
+const activateUserById = async (token, id) => {
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.put(
+      `http://localhost:8080/api/v1/users/${id}/activate`,
+      {}, 
+      config
+    );
+    if (res && res.data) {
+      return res;
+    }
+  } catch (error) {
+    return error.response;
+  }
+};
+const deactivateUserById = async (token, id) => {
+  let config = {
+    maxBodyLength: Infinity,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.put(
+      `http://localhost:8080/api/v1/users/${id}/deactivate`,
+      {}, 
+      config
+    );
+    if (res && res.data) {
+      return res;
+    }
+  } catch (error) {
+    return error.response;
+  }
+};
 const updateUserById = async (user, token, id) => {
   let data = user;
 
@@ -124,28 +188,6 @@ const updateUserById = async (user, token, id) => {
     return error.response;
   }
 };
-
-const deleteUserById = async (token, id) => {
-  let config = {
-    maxBodyLength: Infinity,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  try {
-    const res = await axios.delete(
-      `http://localhost:8080/api/v1/users/${id}`,
-      config
-    );
-    if (res && res.data) {
-      return res;
-    }
-  } catch (error) {
-    return error.response;
-  }
-};
-
 const searchUserByName = async (token, name, pageNo, pageSize) => {
   let config = {
     maxBodyLength: Infinity,
@@ -179,4 +221,6 @@ export {
   updateUserById,
   deleteUserById,
   searchUserByName,
+  activateUserById,
+  deactivateUserById
 };

@@ -20,12 +20,10 @@ export default function AdminLayout({ children }) {
     { name: "Category", icon: icTag, link: "/admin/category" },
     { name: "Order", icon: icOrder, link: "/admin/order" },
     { name: "Notification", icon: icNotification, link: "/admin/notification" },
+    { name: "Setting", icon: icSetting, link: "/admin/settings" },
+    { name: "User", icon: icSetting, link: "/admin/user" },
 
-  ];
 
-  const others = [
-    { name: "Setting", icon: icSetting, link: "/admin/user/settings" },
-        { name: "Exit", icon: icExit, link: "/admin/exit" },
   ];
 
   const pathname = usePathname();
@@ -44,7 +42,7 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen flex flex-row">
-      <AdminSideBar menu={menu} others={others} />
+      <AdminSideBar menu={menu} />
       <div className="flex-grow flex flex-col">
         <AdminHeader title={headerTitle} />
         <div className="flex-grow">{children}</div>

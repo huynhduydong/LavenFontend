@@ -50,13 +50,6 @@ const RegisterPage = () => {
     <>
       <div className="bg-blue-100 flex flex-row items-center justify-evenly w-full">
         {/* Logo */}
-        <Image
-          src={logo2}
-          alt="Laven Logo"
-          priority={true}
-          className="h-auto w-[600px]"
-        ></Image>
-
         {/* Form */}
         <div className="bg-white p-[32px] rounded-lg w-[480px]">
           <div className="text-xl">Đăng ký</div>
